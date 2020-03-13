@@ -4,11 +4,9 @@ This is a repository of JSON configuration files to be used with automated packa
 
 ## Uploading JSON config file
 
-New application folders can be created by selecting `Create new file` and entering the desired application name, being sure to end with a `/`. 
+New application JSON files can be uploaded by selecting `Upload files`, and then drag-and-dropping the folder containing the application JSON config file into the file upload area.
 
-JSON files can then be uploaded by navigating to the application directory and selecting `Upload files`.
-
-Please upload only JSON configuration files to the appropriate application directory.
+Please upload only the JSON configuration files to the appropriate application folder.
 
 JSON files should be uploaded in the form: 
 
