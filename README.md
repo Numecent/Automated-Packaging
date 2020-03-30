@@ -236,7 +236,7 @@ The possible values for `CompressionMethod` are: “LZMA”, “None”
 
 The possible values for `EncryptionMethod` are: “AES-256” ,”AES-256-Enhanced”, “None”
 
-The optional parameter `OutputFileNameNoExt` allows for specifying a name for the output file. If this is left blank then studio will generate a name based.
+The optional parameter `OutputFileNameNoExt` allows for specifying a name for the output file. If this is left blank then studio will generate a name.
 
 ### Automated-Packaging Execution
 
