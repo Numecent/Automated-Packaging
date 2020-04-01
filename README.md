@@ -1,7 +1,7 @@
 # Automated-Packaging –PREVIEW–
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
-Due to this being a preview Numecent does not offer support for automated packaging at this time. All support efforts are community driven. Please visit our [support forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
+As this is a preview Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
 
 ## Overview
 Cloudpaging is a foundational technology framework and represents Numecent's vision to transform native software delivery, deployment and provisioning from the Cloud, both public and private, and on-premises. This patented technology makes it possible to lift and shift existing client applications to a new operating environment without all the hassle and expense of upgrading to new versions of your existing software.
@@ -44,9 +44,9 @@ Now, by using JSON config instruction files and Powershell, you can easily creat
 
 ### JSON Config Instruction Setup
 
-<s>The `<sample JSON format>` details the basic format of the JSON config file. </s>
+The file `Example_JSON_1.0.json` details the basic format of the JSON config instruction file.
 
-Refer to the uploaded JSON Config Instruction files for examples.
+Refer to the uploaded JSON config instruction files for more examples.
 
 The following is an example with comments:
 
