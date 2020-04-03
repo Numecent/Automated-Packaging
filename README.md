@@ -1,4 +1,4 @@
-# Automated-Packaging –PREVIEW–
+# Cloudpaging Automated-Packaging –PREVIEW–
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
 As this is a preview Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
