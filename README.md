@@ -256,6 +256,9 @@ Using this parameter will override the value stored in OutputSettings.OutputFold
 `-working_folder ‘path\to\working\folder\’`
 Using this parameter will override value stored in ProjectSettings.WorkingFolder
 
+`-appset_name ‘custom appset name without extension’`
+Using this parameter will override value stored in OutputSettings.OutputFileNameNoExt and will save the stp file with the provided name
+
 `-debug_mode ‘true’`
 Using this parameter includes more detailed output from the console, prevents generated files from being deleted upon packaging completion, and prevents dat files from being reverted to their pre-capture states.
 
