@@ -55,6 +55,12 @@ $studioPath = "$rootDrive\" + "Program Files\Numecent\Cloudpaging Studio\"
 if(-NOT (Test-Path -Path $studioPath)){
     $studioPath = "C:\Program Files\Numecent\Cloudpaging Studio\"
 }
+
+
+Get-ChildItem -Path "$studioPath\lib" -Filter *.dat | ForEach-Object {
+    Set-ItemProperty -Path $_.FullName -Name IsReadOnly -Value $false
+}
+
 $studioCmd = $studioPath+"JukeboxStudio.exe"
 $studioPrep = $studioPath+"CloudpagingStudio-prep.ps1"
 $fileDAT = $studioPath+"lib\filefilt.dat"
@@ -331,7 +337,7 @@ if ((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\S
 $processIni = $true
 switch ($PsCmdlet.ParameterSetName)
 {
-    “jsonFile”  {
+    "jsonFile"  {
                     if (!$config_file_path)
                     {
                         Throw 'Missing parameter: $config_file_path'
@@ -669,7 +675,7 @@ switch ($PsCmdlet.ParameterSetName)
                     }
                     break
                 }
-    “inputVal” {
+    "inputVal" {
                     if (!$ProjectName)
                     {
                         Throw 'Missing parameter: $ProjectName'
