@@ -41,7 +41,8 @@ param (
     [Parameter(ParameterSetName="jsonFile", Position=1)][string]$installer_path=$null,
     [Parameter(ParameterSetName="jsonFile", Position=2)][string]$output_folder=$null,
     [Parameter(ParameterSetName="jsonFile", Position=3)][string]$working_folder=$null,
-    [Parameter(ParameterSetName="jsonFile", Position=4)][string]$debug_mode=$null
+    [Parameter(ParameterSetName="jsonFile", Position=4)][string]$appset_name=$null,
+    [Parameter(ParameterSetName="jsonFile", Position=5)][string]$debug_mode=$null
 )
 
 $NIPS_VERSION = 1.0         #Version number for nips, this will be stored in revnotes
@@ -416,17 +417,28 @@ switch ($PsCmdlet.ParameterSetName)
                         #$IconFile = $json.ProjectSettings.IconFile  | Format-String
                         #$EulaFile = $json.ProjectSettings.EulaFile  | Format-String
 
-                        $CaptureAllProcesses = "No"
-                        if($json.CaptureSettings.CaptureAllProcesses)
+                        $CaptureAllProcesses = "Yes"
+                        if(!$json.CaptureSettings.CaptureAllProcesses)
                         {
-                            $CaptureAllProcesses = "Yes"
+                            $CaptureAllProcesses = "No"
                         }
                         #$IgnoreChangesUnderInstallerPath = $json.CaptureSettings.IgnoreChangesUnderInstallerPath
                         #$ReplaceRegistryShortPaths = $json.CaptureSettings.ReplaceRegistryShortPaths
                         $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
                         $DefaultDispositionLayer = $json.VirtualizationSettings.DefaultDispositionLayer
-                        #$OutputFileNameNoExt =
-                        #$FinalizeIntoSTP = $json.PackagingSettings.FinalizeIntoSTP  | Format-String
+                        $OutputFileNameNoExt = $json.OutputSettings.OutputFileNameNoExt
+                        if($appset_name){
+                            $OutputFileNameNoExt = $appset_name
+                        }
+                        if($OutputFileNameNoExt -match " "){
+                            $OutputFileNameNoExt = "`"$OutputFileNameNoExt`""
+                        }
+                        
+
+                        $FinalizeIntoSTP = "Yes"
+                        if(!$json.OutputSettings.FinalizeIntoSTP){
+                            $FinalizeIntoSTP = "No"
+                        }
 
                         ##if indicated, create a bat file
 
@@ -728,7 +740,9 @@ DefaultDispositionLayer=$DefaultDispositionLayer
 DefaultServiceVirtualizationAction=$DefaultServiceVirtualizationAction
 
 [PackagingSettings]
+OutputFileNameNoExt=$OutputFileNameNoExt
 OutputFolder="$output_folder"
+FinalizeIntoSTP=$FinalizeIntoSTP
 "@
 
 # Execute the Cloudpaging-prep script, if present
@@ -777,6 +791,10 @@ if ($process.ExitCode -eq 0)
     {
         $ProjectName = $ProjectName.Replace("`"","") #Ensure there are no extra quotes
         $appset = $output_folder + $ProjectName + ".stp"
+        if($OutputFileNameNoExt){
+            $OutputFileNameNoExt = $OutputFileNameNoExt.Replace("`"","")
+            $appset = $output_folder + $OutputFileNameNoExt + ".stp"
+        }
     }
     else
     {
