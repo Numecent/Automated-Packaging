@@ -25,15 +25,17 @@
     The path to the executable installer which the user would like cloudpaging studio to capture
 .PARAMETER working_folder
     Working folder to use when the packaged app is launched.
+.PARAMETER appset_name
+    Name for the .stp appset, do not include an extension. Used instead of OutputSettings.OutputFileNameNoExt
 .PARAMETER debug_mode
     Assigning a non null value to this parameter prevents created files from being deleted
 
 .EXAMPLE
-    >studio-nip.ps1 -config_file_path c:\test\app.json
+    >studio-nip.ps1 -config_file_path 'c:\test\app.json'
     Will automatically package the application as specified in the app.json file
 
-    >studio-nip.ps1 -ProjectName Test -installerFile c:\test\setup.msi -OutputFolder c:\test
-    Will automatically package the setup.msi application by creating an file with parameters passed in
+    >studio-nip.ps1 -config_file_path 'c:\test\app.json' -installer_path 'C:\test\installer.exe' -output_folder 'C:\test\Output'
+    Will automatically package the installer.exe application as specified by the app.json file, and place the output files in the specified location
 #>
 
 param (
@@ -102,7 +104,7 @@ SET SOURCE=%SOURCE:~0,-1%
     $installerName = Split-Path $batPath -Leaf
     $batPath = $batPath.Replace($installerName, "Installer.bat")
 
-    $inst = "`"$($json.CaptureCommands.InstallerPath)`""
+    $inst = "`"$installer_path`""
     $InstallCommand = "" + $json.CaptureCommands.InstallerPrefix + $inst + $json.CaptureCommands.InstallerCommands + "`n"
 
     $batString = $default + $installCommand
