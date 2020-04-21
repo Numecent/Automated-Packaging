@@ -1,0 +1,23 @@
+#
+# Excluded registry paths. New changes made under these paths on client machines 
+# will be saved on the system and not in the sandbox.
+#
+# NOTES:
+# 1) This file is loaded *once* every time a new project is created. The loaded 
+#    information from this file will be saved with the new project. 
+# 2) Reopening an existing project will not reload this file and information will 
+#    be reloaded from the saved project. In other words, changes to this file will 
+#    affect only future projects when they are created.
+# 3) Use only user mode registry root names, i.e., HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER, etc...
+#    Example:HKEY_LOCAL_MACHINE\Software\Endeavors Technologies
+# 4) This file can be empty.
+# 5) If this file DOES NOT EXIST, the DEFAULT entries are automatically included.
+# 6) For best compatility with older Player versions, either:
+#    a) Delete this file; or
+#    b) Specify the same items mentioned in #5.
+
+# -------------------------------------------------------------------------------
+# DEFAULT entries: None
+# -------------------------------------------------------------------------------
+
+# (End of DEFAULT entries) ------------------------------------------------------

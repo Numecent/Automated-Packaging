@@ -1,0 +1,39 @@
+#
+# File disposition filters to be applied at the end of capturing
+#
+# Entry format:
+# {file-or-folder-path} {disposition} {OPTIONAL:recursive}
+#
+# NOTES: 
+# 1) Information from this file does not get saved into the project. This file is 
+#    loaded (or reloaded) every time a new capture is initiated.
+# 2) After the capture is merged to the workspace (STW), the entries in this file 
+#    will be processed by the order of their appearing. 
+#    - When there are multiple overlapping entries with conflicting specifications, 
+#      the last one listed in this file will win.
+#    - This processing affects only the newly captured items.
+# 3) Each entry must be in one line.
+# 4) Entries are case-insensitive.
+# 5) Blank lines are ignored.
+# 6) If a file or folder path contains white spaces, you must enclose the path in quotes (") 
+#    and escape backslashes (\\) as well as other quotes (\").
+# 7) {disposition} must be either 1, 2, 3, or 4.
+# 8) {OPTIONAL:recursive} must be TRUE, FALSE or blank. Default: FALSE.
+# 9) If {disposition} is 3 or 4, the setting is always recursive (TRUE) regardless 
+#    of what is specified in the {OPTIONAL:recursive} field.
+#
+# OTHER NOTES:
+# 1) If a path to be filtered has the Wow6432Node counterpart, consider filtering 
+#    the counterpart as well.
+#
+# EXAMPLES:
+# "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Antimalware"              1           ///< Treated as FALSE (non-recursive)
+# HKEY_CURRENT_USER\Software\Classes\AppID\OneDrive.EXE                         2   TRUE
+# "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"  3   FALSE   ///< Treated as TRUE (recursive) because disposition is virtual (3 or 4)
+# "HKEY_CURRENT_USER\\Volatile Environment"                                     4           ///< Treated as TRUE (recursive)
+
+
+# Set App/Remove Programs to Layer 4.
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall                  4   TRUE
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall      4   TRUE
+HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products                                  4   TRUE

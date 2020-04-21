@@ -1,0 +1,249 @@
+#
+# File capturing filters
+#
+# Entry format:
+# {filter-name} {file-or-folder-path}
+#
+# NOTES:
+# 1) This file is loaded *once* every time a new project is created. The loaded 
+#    information from this file will be saved with the new project. 
+# 2) Reopening an existing project will not reload this file and information will 
+#    be reloaded from the saved project. In other words, changes to this file will 
+#    affect only future projects when they are created.
+# 3) Entries are case-insensitive. Paths are prefixes.
+#
+# OTHER NOTES:
+# 1) If a path to be filtered has the Syswow64 counterpart, consider 
+#    filtering the counterpart as well.
+
+
+#########################################################################
+######################  ASSETS BELOW ARE DELETED  #######################
+#########################################################################
+# The following entries are automatically removed from Studio project because they are unique per machine or Windows installation.
+# Taking these entries from one machine into another can cause the destination machine to malfunction or crash.
+
+FILTER_ACTION    DELETE
+
+#------------------------------------------------------------------------
+# Common filters (All OSes)
+#------------------------------------------------------------------------
+
+# Same as %LocalAppData%\Temp
+FILTER_DEL_USERTEMP_1       %Temp%
+FILTER_DEL_USERTEMP_2       %Tmp%
+
+FILTER_DEL_SYSTEMP_1        %WinDir%\Temp
+FILTER_DEL_SYSTEMP_2        %WinDir%\winsxs\InstallTemp
+FILTER_DEL_USERDATA_1       %UserProfile%\NTuser.dat
+FILTER_DEL_WINDBG           %WinDir%\Debug
+FILTER_DEL_WINPREFETCH      %WinDir%\Prefetch
+FILTER_DEL_PATCHCACHE       %WinDir%\Installer\$PatchCache$
+
+FILTER_DEL_SYSPER_1         %WinDir%\System32\wbem\Performance
+FILTER_DEL_SYSPER_1_X86     %WinDir%\SysWOW64\wbem\Performance
+
+FILTER_DEL_RECYCLE_BIN      %SystemDrive%\$Recycle.Bin
+FILTER_DEL_SYSVOL_1         %SystemDrive%\System Volume Information
+FILTER_DEL_CONFIG_MSI       %SystemDrive%\Config.Msi
+
+FILTER_DEL_SYSLOG_1         %WinDir%\System32\Config\Default.LOG
+FILTER_DEL_SYSLOG_2         %WinDir%\System32\Config\Security.LOG
+FILTER_DEL_SYSLOG_3         %WinDir%\System32\Config\UserDiff.LOG
+FILTER_DEL_SYSLOG_4         %WinDir%\System32\Config\Software
+FILTER_DEL_SYSLOG_5         %WinDir%\System32\Config\System
+FILTER_DEL_SYSLOG_6         %WinDir%\System32\LogFiles
+
+FILTER_DEL_SYSLOG_1_X86     %WinDir%\SysWOW64\Config\Default.LOG
+FILTER_DEL_SYSLOG_2_X86     %WinDir%\SysWOW64\Config\Security.LOG
+FILTER_DEL_SYSLOG_3_X86     %WinDir%\SysWOW64\Config\UserDiff.LOG
+FILTER_DEL_SYSLOG_4_X86     %WinDir%\SysWOW64\Config\Software
+FILTER_DEL_SYSLOG_5_X86     %WinDir%\SysWOW64\Config\System
+FILTER_DEL_SYSLOG_6_X86     %WinDir%\SysWOW64\LogFiles
+
+#------------------------------------------------------------------------
+# Similar filters between OSes
+#------------------------------------------------------------------------
+FILTER_DEL_CLSDATA_XP_1     %UserProfile%\Local Settings\Application Data\Microsoft\Windows\UsrClass.dat
+FILTER_DEL_CLSDATA_XP_2     %SystemDrive%\Documents and Settings\LocalService\Local Settings\Application Data\Microsoft\Windows\UsrClass.dat
+FILTER_DEL_CLSDATA_XP_3     %SystemDrive%\Documents and Settings\NetworkService\Local Settings\Application Data\Microsoft\Windows\UsrClass.dat
+
+FILTER_DEL_USERDATA_XP_1    %SystemDrive%\Documents and Settings\LocalService\NTuser.dat
+FILTER_DEL_USERDATA_XP_2    %SystemDrive%\Documents and Settings\NetworkService\NTuser.dat
+
+FILTER_DEL_CLSDATA_VS_1     %LocalAppData%\Microsoft\Windows\UsrClass.dat
+FILTER_DEL_CLSDATA_VS_2     %WinDir%\ServiceProfiles\LocalService\AppData\Local\Microsoft\Windows\UsrClass.dat
+FILTER_DEL_CLSDATA_VS_3     %WinDir%\ServiceProfiles\NetworkService\AppData\Local\Microsoft\Windows\UsrClass.dat
+
+FILTER_DEL_USERDATA_VS_1    %WinDir%\ServiceProfiles\LocalService\NTuser.dat
+FILTER_DEL_USERDATA_VS_2    %WinDir%\ServiceProfiles\NetworkService\NTuser.dat
+
+#------------------------------------------------------------------------
+# XP filters - Exist only on XP
+#------------------------------------------------------------------------
+# Target: $NtUninstall* folders
+FILTER_DEL_SYSKBUNINST_XP   %WinDir%\$NtUninstall
+
+#------------------------------------------------------------------------
+# Vista filters - Exist only on Vista and later versions
+#------------------------------------------------------------------------
+FILTER_DEL_BOOT_VS          %SystemDrive%\Boot
+FILTER_DEL_ASSEMBL_VS_1     %WinDir%\winsxs\ManifestCache
+FILTER_DEL_WINLOG_VS_1      %WinDir%\Logs
+
+FILTER_DEL_ALLUSERS_SEARCH_VS   %ProgramData%\Microsoft\Search\Data
+FILTER_DEL_USER_SEARCH_DATA     %AppData%\Microsoft\Search\Data
+
+FILTER_DEL_SYSTEMP_VS_1     %WinDir%\System32\DriverStore\Temp
+FILTER_DEL_SYSLOG_VS_1      %WinDir%\System32\Config\Components
+FILTER_DEL_SYSLOG_VS_2      %WinDir%\System32\Config\TxR
+
+FILTER_DEL_SYSTEMP_VS_1_X86 %WinDir%\SysWOW64\DriverStore\Temp
+FILTER_DEL_SYSLOG_VS_1_X86  %WinDir%\SysWOW64\Config\Components
+FILTER_DEL_SYSLOG_VS_2_X86  %WinDir%\SysWOW64\Config\TxR
+
+#------------------------------------------------------------------------
+# Win 7 filters - Exist only on Win 7 and later versions
+#------------------------------------------------------------------------
+FILTER_DEL_LIBRARIES_W7     %SystemDrive%\*.library-ms
+
+
+#########################################################################
+######################  ASSETS BELOW ARE EXCLUDED  ######################
+#########################################################################
+# The following entries are retained in Studio project but automatically excluded from appset because they are machine or Windows configurations.
+# Taking these entries from one machine into another does not stop the target machine from working but can unexpectedly change its settings. 
+
+FILTER_ACTION    EXCLUDE
+
+#------------------------------------------------------------------------
+# Common filters (All OSes)
+#------------------------------------------------------------------------
+# Target: oem*.inf and oem*.PNF files
+FILTER_EXCL_INFOEM              %WinDir%\inf\oem
+
+# Windows registration (COM+ logging, etc)
+FILTER_EXCL_WIN_REGISTRATION    %WinDir%\Registration
+
+# Common System32 executables
+FILTER_EXCL_SYS32_EXE_1         %WinDir%\System32\SVCHOST.EXE
+FILTER_EXCL_SYS32_EXE_2         %WinDir%\System32\SECHOST.DLL
+FILTER_EXCL_SYS32_EXE_3         %WinDir%\System32\SMSS.EXE
+
+FILTER_EXCL_SYSWOW32_EXE_1      %WinDir%\SysWOW64\SVCHOST.EXE
+FILTER_EXCL_SYSWOW32_EXE_2      %WinDir%\SysWOW64\SECHOST.DLL
+
+# Target: Windows license files (using '*' for wildcard, currently '*' can be either '0' or '1').
+FILTER_EXCL_WIN_LICENSES        %WinDir%\System32\7B296FB0-376B-497e-B012-9C450E1B7327-5P-*.C7483456-A289-439d-8115-601632D005A0
+FILTER_EXCL_WIN_LICENSES_X86    %WinDir%\SysWOW64\7B296FB0-376B-497e-B012-9C450E1B7327-5P-*.C7483456-A289-439d-8115-601632D005A0
+
+FILTER_EXCL_SYSLOG_7            %WinDir%\System32\catroot2
+FILTER_EXCL_SYSCONFIG           %WinDir%\System32\config
+FILTER_EXCL_SYSWINEVT           %WinDir%\System32\winevt
+FILTER_EXCL_SYSPERF             %WinDir%\System32\perf*009.dat
+FILTER_EXCL_SYSWBEM             %WinDir%\System32\wbem
+FILTER_EXCL_SYSWDI              %WinDir%\System32\wdi
+FILTER_EXCL_SYSCODEINTEGRITY    %WinDir%\System32\CodeIntegrity
+FILTER_EXCL_SYSSLEEPSTUDY       %WinDir%\System32\SleepStudy
+FILTER_EXCL_SYSSPP              %WinDir%\System32\spp
+
+FILTER_EXCL_SYSLOG_7_X86        %WinDir%\SysWOW64\catroot2
+FILTER_EXCL_SYSCONFIG_X86       %WinDir%\SysWOW64\config
+FILTER_EXCL_SYSWINEVT_X86       %WinDir%\SysWOW64\winevt
+FILTER_EXCL_SYSPERF_X86         %WinDir%\SysWOW64\perf*009.dat
+FILTER_EXCL_SYSWBEM_X86         %WinDir%\SysWOW64\wbem
+FILTER_EXCL_SYSWDI_X86          %WinDir%\SysWOW64\wdi
+FILTER_EXCL_SYSCODEINTEGRITY_X86 %WinDir%\SysWOW64\CodeIntegrity
+FILTER_EXCL_SYSSLEEPSTUDY_X86   %WinDir%\SysWOW64\SleepStudy
+FILTER_EXCL_SYSSPP_X86          %WinDir%\SysWOW64\spp
+
+FILTER_EXCL_SYSSOFTDIST_1       %WinDir%\SoftwareDistribution\DataStore
+FILTER_EXCL_SYSSOFTDIST_2       %WinDir%\SoftwareDistribution\ReportingEvents.log
+FILTER_EXCL_SYSUPDATE           %WinDir%\WindowsUpdate.log
+FILTER_EXCL_SYSSECURITY         %WinDir%\security
+FILTER_EXCL_SYSINSTALLS         %WinDir%\downloaded installations
+FILTER_EXCL_SYSLASTGOOD         %WinDir%\lastgood
+
+FILTER_EXCL_ONE_DRIVE           %LocalAppData%\Microsoft\OneDrive
+
+FILTER_EXCL_WER_1               %LocalAppData%\Microsoft\Windows\WER
+FILTER_EXCL_WER_2               %AllusersProfile%\Microsoft\Windows\WER
+FILTER_EXCL_WEB_CACHE           %LocalAppData%\Microsoft\Windows\WebCache
+FILTER_EXCL_RAC_STATE           %AllusersProfile%\Microsoft\RAC\StateData
+FILTER_EXCL_RAC_TEMP            %ProgramData%\Microsoft\RAC\temp
+FILTER_EXCL_AM_CACHE            %WinDir%\AppCompat
+FILTER_EXCL_RES_CACHE           %WinDir%\rescache
+
+FILTER_EXCL_WIN_SEC_HEALTH      %ProgramData%\Microsoft\Windows Security Health
+FILTER_EXCL_WIN_SEC_CLIENT_1    %ProgramData%\Microsoft\Microsoft Security Client
+FILTER_EXCL_WIN_SEC_CLIENT_2    %ProgramFiles%\Microsoft Security Client
+FILTER_EXCL_WIN_SEC_MALWARE     %ProgramData%\Microsoft Antimalware
+
+# Microsoft Crypto
+FILTER_EXCL_MS_CRYPTO_1         %AppData%\Microsoft\Crypto
+FILTER_EXCL_MS_CRYPTO_2         %ProgramData%\Microsoft\Crypto
+
+# MSIX Packaging Tool
+FILTER_EXCL_MSIX_PKGNG_1        %LocalAppData%\Packages\Microsoft.MsixPackagingTool_8wekyb3d8bbwe\AC\INetCookies
+FILTER_EXCL_MSIX_PKGNG_2        %LocalAppData%\Packages\Microsoft.MsixPackagingTool_8wekyb3d8bbwe\AC\INetHistory
+FILTER_EXCL_MSIX_PKGNG_3        %LocalAppData%\Packages\Microsoft.MsixPackagingTool_8wekyb3d8bbwe\AC\INetCache
+
+# Cortana
+FILTER_EXCL_CORTANA_WIN         %LocalAppData%\Packages\Microsoft.Windows.Cortana_cw5n1h2txyewy
+
+# MISC
+FILTER_EXCL_MISC_1              %windir%\Logs\CBS
+
+#------------------------------------------------------------------------
+# Similar filters between OSes
+#------------------------------------------------------------------------
+# IE Cache
+FILTER_EXCL_IECACHE_XP          %UserProfile%\Local Settings\Temporary Internet Files\Content.IE5
+FILTER_EXCL_IECACHE_VS          %LocalAppData%\Microsoft\Windows\Temporary Internet Files\Content.IE5
+FILTER_EXCL_IECACHE_VS_LOW      %LocalAppData%\Microsoft\Windows\Temporary Internet Files\Low\Content.IE5
+FILTER_EXCL_IECACHE_W8          %LocalAppData%\Microsoft\Windows\INetCache
+
+# IE History
+FILTER_EXCL_IEHIST_XP           %UserProfile%\Local Settings\History\History.IE5
+FILTER_EXCL_IEHIST_VS           %LocalAppData%\Microsoft\Windows\History\History.IE5
+FILTER_EXCL_IEHIST_VS_LOW       %LocalAppData%\Microsoft\Windows\History\Low\History.IE5
+
+# Cookies
+FILTER_EXCL_COOKIES_XP          %UserProfile%\Cookies
+FILTER_EXCL_COOKIES_VS          %LocalAppData%\Microsoft\Windows\Cookies
+
+# Explorer Icon/Thumbnail Cache
+FILTER_EXCL_EXPICONCACHE        %LocalAppData%\Microsoft\Windows\Explorer\iconcache*.db
+FILTER_EXCL_EXPTHUMBCACHE       %LocalAppData%\Microsoft\Windows\Explorer\thumbcache*.db
+FILTER_EXCL_EXPTHUMBCACHETODEL  %LocalAppData%\Microsoft\Windows\Explorer\ThumbCacheToDelete
+
+# MSHTML Image Size Cache
+FILTER_EXCL_MSIMGSIZ_XP         %UserProfile%\Local Settings\Application Data\Microsoft\Internet Explorer\MSIMGSIZ.DAT
+FILTER_EXCL_MSIMGSIZ_VS         %LocalAppData%\Microsoft\Internet Explorer\MSIMGSIZ.DAT
+
+# CryptoAPI Certificate Revocation List (CRL) Cache
+FILTER_EXCL_CRYPTCACHE_XP       %UserProfile%\Application Data\Microsoft\CryptnetUrlCache
+FILTER_EXCL_CRYPTCACHE_VS       %UserProfile%\AppData\LocalLow\Microsoft\CryptnetUrlCache
+
+#------------------------------------------------------------------------
+# Vista filters - Exist only on Vista and later versions
+#------------------------------------------------------------------------
+FILTER_EXCL_WMIAPRPL_VS         %WinDir%\inf\WmiApRpl
+FILTER_EXCL_SVCPROFILES_VS      %WinDir%\ServiceProfiles
+
+FILTER_EXCL_SMI_VS              %WinDir%\System32\SMI
+FILTER_EXCL_SMI_VS_X86          %WinDir%\SysWOW64\SMI
+
+#------------------------------------------------------------------------
+# Modern Apps - Exist only on Win 8 and later versions
+#------------------------------------------------------------------------
+FILTER_EXCL_APPX_PROVISIONING   %AllusersProfile%\Microsoft\Windows\AppxProvisioning.xml
+FILTER_EXCL_APPX_REPOSITORY_1   %AllusersProfile%\Microsoft\Windows\AppRepository\edb*.log
+FILTER_EXCL_APPX_REPOSITORY_2   %AllusersProfile%\Microsoft\Windows\AppRepository\edb*.chk
+FILTER_EXCL_APPX_REPOSITORY_3   %AllusersProfile%\Microsoft\Windows\AppRepository\edb*.jrs
+
+#------------------------------------------------------------------------
+# Win 10 filters - Exist only on Windows 10 and later versions
+#------------------------------------------------------------------------
+FILTER_EXCL_WINDOWS_DEFENDER_1  %ProgramData%\Microsoft\Windows Defender
+FILTER_EXCL_WINDOWS_DEFENDER_2  %ProgramFiles%\Windows Defender

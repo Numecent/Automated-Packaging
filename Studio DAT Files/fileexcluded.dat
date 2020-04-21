@@ -1,0 +1,37 @@
+#
+# Excluded file paths on client machines. New changes made under these paths 
+# on client machines will be saved on the system and not in the sandbox.
+#
+# Entry format:
+# {folder-path}
+#
+# NOTES:
+# 1) This file is loaded *once* every time a new project is created. The loaded 
+#    information from this file will be saved with the new project. 
+# 2) Reopening an existing project will not reload this file and information will 
+#    be reloaded from the saved project. In other words, changes to this file will 
+#    affect only future projects when they are created.
+# 3) Path forms supported:
+#     a) Absolute path (e.g., C:\Abc\Xyz).
+#     b) Special folder templates (e.g., ?desktop?).
+#     c) Environment variables (e.g., %programfiles%\xyz)
+# 4) This file can be empty.
+# 5) If this file DOES NOT EXIST, the DEFAULT entries are automatically included.
+# 6) For best compatility with older Player versions, either:
+#    a) Delete this file; or
+#    b) Specify the same items mentioned in #5.
+#
+# -------------------------------------------------------------------------------
+# DEFAULT entries: By default, all "My" folders are excluded
+# -------------------------------------------------------------------------------
+?documents?
+?desktop?
+?music?
+?videos?
+?pictures?
+?publicdocuments?
+?publicmusic?
+?publicvideos?
+?publicpictures?
+?internetcache?
+# (End of DEFAULT entries) ------------------------------------------------------

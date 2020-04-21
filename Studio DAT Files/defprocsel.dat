@@ -1,0 +1,67 @@
+#
+# This file specifies which processes are allowed or disallowed to access an 
+# virtual application's name space. Allowed processes can select to access the 
+# application's layer 4 files and keys even when the processes don't belong 
+# to the virtual application. Disallowed processes cannot select to access the 
+# application's layer 4 files and keys even when the processes belong to the 
+# virtual application.
+#
+# Entry format:
+# {Process-Name} {TRUE:allow-select|FALSE:disallow-select} [{TRUE:allow-read|FALSE:disallow-read|NEITHER:unknown-read}]
+# - If setting for "read" is omitted, it is assumed to be NEITHER (no overwrite)
+# - If setting for "select" is set to FALSE (disallowed), setting for "read" is ignored.
+#
+# NOTES: 
+# 1) This file is loaded *once* every time a new project is created. Subsequently,
+#    loaded information from this file will be saved with the new project. Reopening
+#    an existing project will not reload this file and information will be reloaded 
+#    from the saved project. In other words, changes to this file will affect only
+#    future projects when they are created. Users can modify the list using the 
+#    project view.
+# 2) Each entry must be in one line.
+# 3) Entries are case-insensitive.
+# 4) Blank lines are ignored.
+# 5) This file can be empty
+# 6) If this file DOES NOT EXIST, the following entries are automatically included:
+#    (Allowed for both "select" and "read"): 
+#        CSRSS.EXE, 
+#        AGENTSVR.EXE, 
+#        SVCHOST.EXE, 
+#        SERVICES.EXE, 
+#        WINLOGON.EXE, 
+#        CONSENT.EXE. 
+#    (Denied for "select"): 
+#        TRUSTEDINSTALLER.EXE.
+# 7) For best compatility with older Player versions, either:
+#    a) Delete this file; or
+#    b) Specify the same items mentioned in #6.
+
+# -------------------------------------------------------------------------------
+# Allowed list
+# -------------------------------------------------------------------------------
+# The following process names are allowed to SELECT files and keys of an appset
+# even if those assets are on layer 4. SELECT-ability applies to Windows session
+# where the appset is mounted, and for the processes that run in the same session.
+# This restriction does not apply to Windows service processes. If allowed, they
+# can SELECT assets of the specified appset in any Windows session.
+# -------------------------------------------------------------------------------
+AGENTSVR.EXE            TRUE    TRUE
+# UAC support
+CONSENT.EXE             TRUE    TRUE
+CSRSS.EXE               TRUE    TRUE
+# Service controller. Enable Service-based integration with the system.
+SERVICES.EXE            TRUE    TRUE
+# COM container. Enable COM-based integration with the system.
+SVCHOST.EXE             TRUE    TRUE
+WINLOGON.EXE            TRUE    TRUE
+
+# -------------------------------------------------------------------------------
+# Denied list
+# -------------------------------------------------------------------------------
+# The following process names are known to need direct access to Windows system.
+# They should not be allowed to SELECT files and keys of an appset, even if those 
+# assets are on layer 3.
+# -------------------------------------------------------------------------------
+# Windows core components installer.
+TRUSTEDINSTALLER.EXE    FALSE
+

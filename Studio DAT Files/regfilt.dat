@@ -1,0 +1,195 @@
+#
+# Registry capturing filters
+#
+# Entry format:
+# {filter-name} {registry-key-path} {OPTIONAL:registry-value-name}
+#
+# NOTES:
+# 1) This file is loaded *once* every time a new project is created. The loaded 
+#    information from this file will be saved with the new project. 
+# 2) Reopening an existing project will not reload this file and information will 
+#    be reloaded from the saved project. In other words, changes to this file will 
+#    affect only future projects when they are created.
+# 3) Entries are case-insensitive. Paths are prefixes.
+# 4) If an optional value name is listed, only the value name under the specified key path is filtered.
+# 5) Separate registry key path and value name using a tab
+# 6) If the key path contains spaces, then enclose the path in quotes (") and escape backslashes (\\)
+#    e.g., "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager\\Environment"    PATH
+#    Above example means PATH value under HKEY_LOCAL_MACHINE\...\Environment
+#
+# OTHER NOTES:
+# 1) The paths HKEY_USERS\<User-SID> and HKEY_USERS\<User-SID>_Classes are 
+#    automatically excluded, except for the current logon user, even when
+#    not specified in this file.
+# 2) If a path to be filtered has the Wow6432Node counterpart, consider 
+#    filtering the counterpart as well.
+
+
+#########################################################################
+######################  ASSETS BELOW ARE DELETED  #######################
+#########################################################################
+# The following entries are automatically removed from Studio project because they are unique per machine or Windows installation.
+# Taking these entries from one machine into another can cause the destination machine to malfunction or crash.
+
+FILTER_ACTION   DELETE
+
+FILTER_DEL_000  HKEY_LOCAL_MACHINE\Hardware\Description
+FILTER_DEL_001  HKEY_LOCAL_MACHINE\Hardware\ACPI
+
+FILTER_DEL_011  "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache"
+FILTER_DEL_012  "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkList\\Nla\\Cache"
+FILTER_DEL_013  "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Perflib"
+FILTER_DEL_014  "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore"
+FILTER_DEL_015  HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer   GlobalAssocChangedCounter
+
+FILTER_DEL_020  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VSS
+FILTER_DEL_021  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\InstMon
+
+FILTER_DEL_030  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\PCI
+FILTER_DEL_031  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\IDE
+FILTER_DEL_032  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\ACPI
+FILTER_DEL_033  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\FDC
+FILTER_DEL_034  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\Root\LEGACY_InstMon
+
+FILTER_DEL_040  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\ProductOptions
+FILTER_DEL_041  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\ServiceCurrent
+FILTER_DEL_042  HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\MUI\StringCacheSettings         StringCacheGeneration
+FILTER_DEL_043  "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager"           PendingFileRenameOperations
+
+FILTER_DEL_050  HKEY_LOCAL_MACHINE\System\Setup
+FILTER_DEL_051  HKEY_LOCAL_MACHINE\System\RNG
+
+FILTER_DEL_060  "HKEY_USERS\\.DEFAULT\\Software\\Classes\\Local Settings\\MuiCache"
+
+
+#########################################################################
+######################  ASSETS BELOW ARE EXCLUDED  ######################
+#########################################################################
+# The following entries are retained in Studio project but automatically excluded from appset because they are machine or Windows configurations.
+# Taking these entries from one machine into another does not stop the target machine from working but can unexpectedly change its settings. 
+
+FILTER_ACTION    EXCLUDE
+
+FILTER_EXCL_MS_MALWARE_1_1      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Antimalware"
+FILTER_EXCL_MS_MALWARE_2_1      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Antimalware Setup"
+FILTER_EXCL_MS_MALWARE_3_1      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware"
+
+FILTER_EXCL_MS_MALWARE_1_2      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Microsoft Antimalware"
+FILTER_EXCL_MS_MALWARE_2_2      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Microsoft Antimalware Setup"
+FILTER_EXCL_MS_MALWARE_3_2      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Policies\\Microsoft\\Microsoft Antimalware"
+
+FILTER_EXCL_MS_SEC_CLIENT_1_1   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Security Client"
+FILTER_EXCL_MS_SEC_CLIENT_1_2   "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Microsoft Security Client"
+
+FILTER_EXCL_MS_DEFENDER_1_1     "HKEY_LOCAL_MACHINE\\SOFTWARE\\Policies\\Microsoft\\Windows Defender"
+FILTER_EXCL_MS_DEFENDER_1_2     "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Policies\\Microsoft\\Windows Defender"
+
+FILTER_EXCL_MS_STREAM_MRU       HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\StreamMRU
+FILTER_EXCL_MS_STREAMS          HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Streams
+
+FILTER_EXCL_HKCU_CLS_1          HKEY_CURRENT_USER\Software\Classes\AppID\OneDrive.EXE
+FILTER_EXCL_HKCU_CLS_2          HKEY_CURRENT_USER\Software\Classes\AppID\OOBERequestHandler.OOBERequestHandler
+FILTER_EXCL_HKCU_CLS_3          HKEY_CURRENT_USER\Software\Classes\AppID\SyncEngineFileInfoProvider.SyncEngineFileInfoProvider
+
+FILTER_EXCL_CITRIX_DLL_HOOK_1   HKEY_LOCAL_MACHINE\SOFTWARE\Citrix\CtxHook\AppInit_Dlls
+FILTER_EXCL_CITRIX_DLL_HOOK_2   HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Citrix\CtxHook\AppInit_Dlls
+
+FILTER_EXCL_1000 HKEY_LOCAL_MACHINE\Software\Classes\CLSID\{208D2C60-3AEA-1069-A2D7-08002B30309D}
+FILTER_EXCL_1001 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Classes\CLSID\{208D2C60-3AEA-1069-A2D7-08002B30309D}
+FILTER_EXCL_1002 HKEY_LOCAL_MACHINE\Software\Classes\Wow6432Node\CLSID\{208D2C60-3AEA-1069-A2D7-08002B30309D}
+
+FILTER_EXCL_1003 HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Cryptography
+FILTER_EXCL_1004 HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\SystemCertificates
+FILTER_EXCL_1005 HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\EnterpriseCertificates
+
+FILTER_EXCL_1006 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Microsoft\Cryptography
+FILTER_EXCL_1007 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Microsoft\SystemCertificates
+FILTER_EXCL_1008 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Policies\Microsoft\EnterpriseCertificates
+
+FILTER_EXCL_1009 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Reliability Analysis"
+FILTER_EXCL_1010 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Security Center"
+
+FILTER_EXCL_1011 HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\RemoteComputer
+FILTER_EXCL_1012 HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\NetworkNeighborhood
+FILTER_EXCL_1013 HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\AllowedEnumeration
+FILTER_EXCL_1014 HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2
+
+FILTER_EXCL_1015 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\RemoteComputer
+FILTER_EXCL_1016 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\NetworkNeighborhood
+FILTER_EXCL_1017 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\AllowedEnumeration
+FILTER_EXCL_1018 HKEY_LOCAL_MACHINE\Software\Wow6432NodeMicrosoft\Windows\CurrentVersion\Explorer\MountPoints2
+
+FILTER_EXCL_1019 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\Schedule\\TaskCache"
+FILTER_EXCL_1020 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SPP"
+FILTER_EXCL_1021 "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ASR\\BackupSession"
+FILTER_EXCL_1022 "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows Activation Technologies"
+FILTER_EXCL_1023 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform"
+
+FILTER_EXCL_1024 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Notifications"
+FILTER_EXCL_1025 "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
+
+FILTER_EXCL_1026 "HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\Notifications"
+FILTER_EXCL_1027 "HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
+
+FILTER_EXCL_1028 HKEY_LOCAL_MACHINE\Software\Microsoft\WBEM
+FILTER_EXCL_1029 HKEY_LOCAL_MACHINE\Software\Microsoft\SQMClient
+FILTER_EXCL_1030_1 HKEY_LOCAL_MACHINE\Software\Microsoft\Cryptography
+FILTER_EXCL_1030_2 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Cryptography
+FILTER_EXCL_1031 HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\WindowsUpdate
+
+FILTER_EXCL_1032 HKEY_LOCAL_MACHINE\Software\Microsoft\Tracing
+FILTER_EXCL_1033 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeID
+FILTER_EXCL_1034 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeIDFor32BitProcesses
+FILTER_EXCL_1035 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeIDFor64BitProcesses
+
+FILTER_EXCL_1036 HKEY_LOCAL_MACHINE\Software\Wow6432Node\Microsoft\Tracing
+FILTER_EXCL_1037 HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeID
+FILTER_EXCL_1038 HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeIDFor32BitProcesses
+FILTER_EXCL_1039 HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Fusion\GACChangeNotification\Default\StoreChangeIDFor64BitProcesses
+
+FILTER_EXCL_1040 HKEY_LOCAL_MACHINE\System\LastKnownGoodRecovery
+FILTER_EXCL_1041 HKEY_LOCAL_MACHINE\System\WPA
+
+FILTER_EXCL_1042 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Network
+FILTER_EXCL_1043 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\WMI\Autologger\SQMLogger
+FILTER_EXCL_1044 "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\Session Manager"
+FILTER_EXCL_1045 "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\Circular Kernel Context Logger"
+
+FILTER_EXCL_1046 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\WmiApRpl
+FILTER_EXCL_1047 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\VMTools
+FILTER_EXCL_1048 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Eventlog
+FILTER_EXCL_1049 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\TrustedInstaller
+FILTER_EXCL_1050 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\MSIServer
+FILTER_EXCL_1051 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\MpsSvc
+FILTER_EXCL_1052 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Ecache
+FILTER_EXCL_1053 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Rdyboost
+FILTER_EXCL_1054 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NetBT
+FILTER_EXCL_1055 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\TcpIp
+FILTER_EXCL_1056 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\TcpIp6
+FILTER_EXCL_1057 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\AsyncMac
+FILTER_EXCL_1058 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\BITS
+FILTER_EXCL_1059 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Nsi
+FILTER_EXCL_1060 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\DeviceAssociationService
+FILTER_EXCL_1061 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\bam
+FILTER_EXCL_1062 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\pla
+FILTER_EXCL_1063 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\UsoSvc
+FILTER_EXCL_1064 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Schedule
+FILTER_EXCL_1065 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\tunnel
+FILTER_EXCL_1066 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Winmgmt
+
+FILTER_EXCL_1070 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\Root\LEGACY_
+FILTER_EXCL_1071 HKEY_LOCAL_MACHINE\System\CurrentControlSet\Enum\STORAGE\VolumeSnapshot
+
+FILTER_EXCL_1090 "HKEY_CURRENT_USER\\Volatile Environment"
+
+FILTER_EXCL_1100 HKEY_CURRENT_USER\Software\Microsoft\EventSystem
+FILTER_EXCL_1101 HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2
+
+FILTER_EXCL_1102 "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ZoneMap"
+FILTER_EXCL_1103 "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Wpad"
+FILTER_EXCL_1104 "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Connections"
+
+FILTER_EXCL_1110 "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows NT\\CurrentVersion\\SoftwareProtectionPlatform"
+
+FILTER_EXCL_2000 "HKEY_USERS\\.DEFAULT\\Software\\Microsoft\\Windows\\Windows Error Reporting"
+FILTER_EXCL_2001 HKEY_USERS\S-1-5-19\Software\Microsoft\SQMClient

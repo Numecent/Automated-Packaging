@@ -1,0 +1,19 @@
+#
+# This file specifies which process(es) are *not* to be captured when an application 
+# installation is being monitored.
+#
+# Entry format:
+# {Process-Name}
+#
+# NOTES: 
+# 1) Information from this file does not get saved into the project. This file is 
+#    loaded (or reloaded) every time a new capture is initiated.
+# 2) Each entry must be in one line.
+# 3) Entries are case-insensitive.
+# 4) Blank lines are ignored.
+# 5) If process name contains white spaces, you must enclose the name in quotes.
+
+# Windows Search Indexer processes
+C:\WINDOWS\SYSTEM32\SEARCHINDEXER.EXE
+C:\WINDOWS\SYSTEM32\SEARCHFILTERHOST.EXE
+C:\WINDOWS\SYSTEM32\SEARCHPROTOCOLHOST.EXE
