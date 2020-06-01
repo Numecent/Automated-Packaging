@@ -1,0 +1,95 @@
+﻿{
+    "JsonConfigVersion": 1.0,
+    "ProjectSettings": {
+        "ProjectName": "Inkscape_0-92-4-20190121_64bit_x64_NLR_English_Rel1",
+        "ProjectDescription": "Inkscape is a free and open-source vector graphics editor.",
+        "IconFile": "C:\\Program Files\\Inkscape\\inkscape.exe",
+        "ProjectFileName": "",
+        "WorkingFolder": "C:\\Program Files\\Inkscape\\",
+        "ProjectFolder": "c:\\NIP_software\\Inkscape\\output\\",
+        "CommandLine": "C:\\Program Files\\Inkscape\\inkscape.exe",
+        "CommandLineParams": "",
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 300,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_CURRENT_USER\\Software\\Classes",
+            " HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT",
+            " HKEY_CURRENT_USER\\Software\\Microsoft",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\IdentityCRL",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node",
+            " HKEY_USERS\\.DEFAULT",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\SystemCertificates"
+        ],
+        "FileExclusions": [
+            "        %ProgramData%\\Microsoft\\Windows\\wfp",
+            "%winDir%\\Installer\\*.msi",
+            "       %UserProfile%\\AppData\\Local\\NuGet",
+            "     %LocalAppData%\\Packages",
+            "      %ProgramData%\\chocolatey",
+            "%winDir%\\Installer\\*.msp",
+            "     %UserProfile%\\AppData\\LocalLow\\Microsoft",
+            "      %UserProfile%\\Desktop\\Ninite",
+            "    %ProgramData%\\shimgen",
+            "           %WinDir%\\AppCompat",
+            "     %CommonDesktop%\\Inkscape*.lnk",
+            "\t    %WinDir%\\Microsoft.NET",
+            "          %WinDir%\\Installer\\*.msi"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": "",
+        "InstallerPath": "c:\\NIP_software\\Inkscape\\Installer_cfg\\InkScape.exe",
+        "InstallerCommands": " /S ",
+        "PostInstallActions": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {},
+        "ModifyKeys": {}
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "SandboxFileExclusions": [],
+        "SandboxRegistryExclusions": []
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": []
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "c:\\NIP_software\\Inkscape\\output\\"
+    }
+}
