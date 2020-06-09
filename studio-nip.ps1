@@ -355,8 +355,14 @@ switch ($PsCmdlet.ParameterSetName)
                     $studioIni = $config_file_path
                      $studioLog ="$([io.path]::getdirectoryname($config_file_path))\" + "$([io.path]::GetFileNameWithoutExtension($config_file_path))_NIP.log"
                     # Read the INI for a project name
-
-                    $json = Get-Content $config_file_path | ConvertFrom-Json
+                    try{
+                        $json = Get-Content $config_file_path | ConvertFrom-Json
+                    }catch{
+                        Write-Warning "Could not read JSON File"
+                        Write-Output $_.ScriptStackTrace
+                        exit
+                    }
+                    
 
 
                     [double]$version = $json.JsonConfigVersion -as [double]
@@ -370,17 +376,11 @@ switch ($PsCmdlet.ParameterSetName)
                         $min = $SUPORTED_JSON | Measure-Object -Minimum
                         if($min -gt $version)
                         {
-                            Write-Output "WARNING: This configuration file is no longer supported, would you like to continue anyways?"
+                            Write-Output "WARNING: This configuration file is no longer supported."
                         }else
                         {
-                            Write-Output "WARNING: This configuration file request a newer version of NIPS, would you like to continue anyways?"
+                            Write-Output "WARNING: This configuration file request a newer version of NIPS script"
                         }
-
-                        Write-Output "Press `"Enter`" to continue or `"Ctrl-C`" to cancel"
-                            do
-                            {
-                                $key = [Console]::ReadKey("noecho")
-                            }while($key.Key -ne "Enter")
                     }
 
                     ####set required settings here###
