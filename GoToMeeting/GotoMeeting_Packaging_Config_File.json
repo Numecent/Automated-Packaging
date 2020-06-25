@@ -1,0 +1,123 @@
+﻿{
+    "JsonConfigVersion": 2.0,
+    "PackagingNotes": [
+        "https://builds.cdn.getgo.com/builds/G2MSetupBundle/20200428_31/G2MSetup8.40-10.9_IT.msi"
+    ],
+    "ProjectSettings": {
+        "ProjectName": "GotoMeeting_64bit_NLR_English_Rel1",
+        "ProjectDescription": "GoToMeeting is a web-hosted service created and marketed by LogMeIn. It is an online meeting, desktop sharing, and video conferencing software package that enables the user to meet with other computer users, customers, clients or colleagues via the Internet in real time.",
+        "ProjectIconFile": "",
+        "ProjectFileName": "",
+        "ProjectFolder": "C:\\NIP_software\\GotoMeeting\\Output\\",
+        "TargetCommand": {
+            "CommandLine": "explorer.exe %USERPROFILE%\\desktop\\GotoMeeting.lnk",
+            "WorkingFolder": ""
+        },
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 300,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\Local Settings",
+            " HKEY_CURRENT_USER\\Software\\Microsoft\\RestartManager",
+            " HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Internet Explorer",
+            " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_USERS\\.DEFAULT",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\LogMeInInc\\COLVideo\\UniqueEndpointId"
+        ],
+        "FileExclusions": [
+            "%winDir%\\Installer\\*.msp",
+            "%winDir%\\Installer\\*.msi",
+            "%winDir%\\Tasks",
+            "%Localappdata%\\Microsoft",
+            "%Localappdata%\\Packages",
+            "%appdata%\\Microsoft\\Windows\\Recent\\CustomDestinations"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "InstallerDownload": {
+        "DownloadURL": "https://builds.cdn.getgo.com/builds/g2m/17359/G2MSetup10.9.17359_IT.msi",
+        "DownloadPath": "C:\\NIP_software\\GotoMeeting\\Installer_cfg\\GotoMeeting.msi",
+        "SHA-256": "3F244426C4E80C1D109AD275F503C205933450B485DFECB313EED6AD379440AE"
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "PrerequisiteDownload": {},
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": " msiexec /i ",
+        "InstallerPath": "C:\\NIP_software\\GotoMeeting\\Installer_cfg\\GotoMeeting.msi",
+        "InstallerCommands": " /qb-! G2MINSTALLFORALLUSERS=1 G2MRUNATLOGON=false G2MINTEGRATION=Auto G2MPERFORMAVC=false  G2WENABLED=true G2TENABLED=true /norestart   ",
+        "PostInstallActions": {
+            "Enabled": true,
+            "Commands": [
+                "::",
+                "TIMEOUT /T 5 /NOBREAK >NUL",
+                "taskkill /F /IM g2mstart.exe /T",
+                "dir %programfiles(x86)%\\GoToMeeting /b /A:D>GTSV.txt",
+                "set /P GTSV=<GTSV.txt",
+                "del GTSV.txt /F/Q",
+                "set TARGET='%programfiles(x86)%\\GoToMeeting\\%GTSV%\\g2mstart.exe' ",
+                "set SHORTCUT='%USERPROFILE%\\desktop\\GoToMeeting.lnk'",
+                "set PWS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile",
+                "%PWS% -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()",
+                "reg add HKCU\\SOFTWARE\\LogMeInInc\\GoToMeeting /v PerformAVC /t REG_SZ /d false /f "
+            ]
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {},
+        "ModifyKeys": {
+            "Key1": {
+                "Location": "HKEY_CURRENT_USER\\SOFTWARE\\LogMeInInc\\GoToMeeting",
+                "Keys": [
+                    "\"PerformAVC\"=\"false\"",
+                    "\"UserId\"=\"\""
+                ]
+            }
+        }
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers": {},
+        "RegistryDispositionLayers": {},
+        "SandboxFileExclusions": [
+            "?roaminappdata?",
+            "?localappdata?"
+        ],
+        "SandboxRegistryExclusions": [
+            "HKEY_CURRENT_USER\\SOFTWARE\\LogMeInInc"
+        ]
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": []
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "C:\\NIP_software\\GotoMeeting\\Output\\"
+    }
+}

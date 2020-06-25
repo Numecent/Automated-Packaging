@@ -1,16 +1,16 @@
 ﻿{
     "JsonConfigVersion": 2.0,
     "PackagingNotes": [
-        "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe "
+        "https://curl.haxx.se/windows/dl-7.69.1_1/curl-7.69.1_1-win64-mingw.zip "
     ],
     "ProjectSettings": {
-        "ProjectName": "CodeBlocks_64bit_NLR_English_Rel1",
-        "ProjectDescription": "Code::Blocks is a free, open-source cross-platform IDE that supports multiple compilers including GCC, Clang and Visual C++. It is developed in C++ using wxWidgets as the GUI toolkit. Using a plugin architecture, its capabilities and features are defined by the provided plugins. Currently, Code::Blocks is oriented towards C, C++, and Fortran. It has a custom build system and optional Make support.",
+        "ProjectName": "cURL_64bit_NLR_English_Rel1",
+        "ProjectDescription": "cURL (pronounced 'curl') is a computer software project providing a library (libcurl) and command-line tool (curl) for transferring data using various network protocols. The name stands for 'Client URL', which was first released in 1997.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\CodeBlocks\\Output\\",
+        "ProjectFolder": "C:\\NIP_software\\cURL\\Output\\",
         "TargetCommand": {
-            "CommandLine": "%ProgramFiles%\\CodeBlocks\\codeblocks.exe",
+            "CommandLine": "cmd.exe /K %PUBLIC%\\desktop\\cURL.lnk",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -38,8 +38,7 @@
             "%winDir%\\Installer\\*.msp",
             "%winDir%\\Installer\\*.msi",
             "%ProgramData%\\Package Cache",
-            "%appdata%\\Microsoft\\Windows\\Start Menu\\Programs\\CodeBlocks\\Uninstall CodeBlocks.lnk",
-            "%programfiles%\\codeblocks\\uninstall.exe"
+            "%LOCALAPPDATA%\\Microsoft\\Windows\\PowerShell"
         ],
         "ProcessExclusions": [],
         "ProcessInclusions": {
@@ -48,9 +47,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe",
-        "DownloadPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
-        "SHA-256": "0E5F140C9371C39F46DC00CD75D6A7A8782814BAEFDF604F923E9AC647C59E09"
+        "DownloadURL": "https://curl.haxx.se/windows/dl-7.69.1_1/curl-7.69.1_1-win64-mingw.zip",
+        "DownloadPath": "C:\\NIP_software\\cURL\\Installer_cfg\\cURL.zip",
+        "SHA-256": "D3E6E1225913EA2FD8CC34CBAF3C29E154B48FB94A9F964C0D0A7BAFAA4E68AF"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -59,14 +58,20 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": "  ",
-        "InstallerPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
-        "InstallerCommands": "/S  ",
+        "InstallerPrefix": "powershell.exe -NoP -NonI -Command Expand-Archive '",
+        "InstallerPath": "C:\\NIP_software\\cURL\\Installer_cfg\\cURL.zip",
+        "InstallerCommands": "' '%programfiles%\\cURL_Cloud\\'   ",
         "PostInstallActions": {
             "Enabled": true,
             "Commands": [
-                "TIMEOUT /T 5 /NOBREAK >NUL",
-                "taskkill /F /IM CodeBlocks.exe /T"
+                ":: ",
+                "dir C:\\Program Files\\cURL_Cloud /b /A:D>cURLV.txt",
+                "set /P cURLV=<cURLV.txt",
+                "del cURLV.txt /F/Q",
+                "set TARGET='%programfiles%\\cURL_Cloud\\%cURLV%\\bin\\curl.exe' ",
+                "set SHORTCUT='%PUBLIC%\\desktop\\cURL.lnk'",
+                "set PWS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile",
+                "%PWS% -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()"
             ]
         },
         "DebugMode": false
@@ -95,6 +100,6 @@
         "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\CodeBlocks\\Output\\"
+        "OutputFolder": "C:\\NIP_software\\cURL\\Output\\"
     }
 }

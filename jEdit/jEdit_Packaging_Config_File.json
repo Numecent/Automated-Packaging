@@ -1,0 +1,184 @@
+﻿{
+    "JsonConfigVersion": 2.0,
+    "PackagingNotes": [
+        "https://sdlc-esd.oracle.com/ESD6/JSCDL/jdk/8u251-b08/3d5a2bb8f8d4428bbe94aed7ec7ae784/jre-8u251-windows-x64.exe?GroupName=JSC&FilePath=/ESD6/JSCDL/jdk/8u251-b08/3d5a2bb8f8d4428bbe94aed7ec7ae784/jre-8u251-windows-x64.exe&BHost=javadl.sun.com&File=jre-8u251-windows-x64.exe&AuthParam=1589300382_303aad20478dd0c94fea60aaccb51977&ext=.exe",
+        "http://jEdit.mirror.rafal.ca/jEdit/downloads/drops4/R-4.15-202003050155/jEdit-SDK-4.15-win32-x86_64.zip"
+    ],
+    "ProjectSettings": {
+        "ProjectName": "jEdit_x64_NLR_English_Rel1",
+        "ProjectDescription": "jEdit is a free software text editor available under the GNU General Public License version 2.0. It is written in Java and runs on any operating system with Java support, including BSD, Linux, macOS and Windows.",
+        "ProjectIconFile": "",
+        "ProjectFileName": "",
+        "ProjectFolder": "C:\\NIP_software\\jEdit\\Output\\",
+        "TargetCommand": {
+            "CommandLine": "c:\\program files\\jEdit\\jEdit.exe ",
+            "WorkingFolder": ""
+        },
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 500,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Classes\\\\Local Settings\\\\MuiCache",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\Network",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_USERS\\.DEFAULT",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+            " HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\JavaSoft\\\\Java Update"
+        ],
+        "FileExclusions": [
+            "%winDir%\\Installer\\*.msp",
+            "%winDir%\\Installer\\*.msi",
+            "%CommonProgramFiles(X86)%\\Java",
+            "%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\Java",
+            "%LocalAppData%\\Microsoft\\Internet Explorer",
+            "%LocalAppData%\\Microsoft\\Windows\\PowerShell",
+            "%Programfiles%\\jEdit\\unins000.dat",
+            "%Programfiles%\\jEdit\\unins000.exe",
+            "%ProgramData%\\Oracle",
+            "%ProgramData%\\Microsoft\\windows\\wfp",
+            "%ProgramData%\\Microsoft\\windows\\Start Menu\\Programs\\jEdit\\Uninstall jEdit.lnk"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "InstallerDownload": {
+        "DownloadURL": "https://astuteinternet.dl.sourceforge.net/project/jedit/jedit/5.5.0/jedit5.5.0install.exe",
+        "DownloadPath": "C:\\NIP_software\\jEdit\\Installer_cfg\\jEdit.exe",
+        "SHA-256": "AC6255EB30B3F26B3D4646F9F65A8641EB9D19240435EAF4B2FA6766A2D34D90"
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "PrerequisiteDownload": {
+            "Jre1.8_64bit": {
+                "DownloadURL": "https://oraclemirror.np.gy/jre8/jre-8u251-windows-x64.exe",
+                "DownloadPath": "C:\\NIP_software\\eclipse\\Installer_cfg\\jre-8u251-windows-x64.exe",
+                "SHA-256": "E1B646C9483352F5FD74D78579B38D4136ECFCFE3E32B8426C70D84D6647463F"
+            }
+        },
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": "",
+        "InstallerPath": "C:\\NIP_software\\jEdit\\Installer_cfg\\jEdit.exe",
+        "InstallerCommands": " /VERYSILENT /SUPPRESSMSGBOXES /NOCANCLE /NORESTART",
+        "PostInstallActions": {
+            "Enabled": true,
+            "Commands": [
+                " TIMEOUT /T 2 /NOBREAK >NUL",
+                "%SOURCE%\\jre-8u251-windows-x64.exe /s",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\dtplugin\\deployJava1.dll c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\dtpluginpdeployJava1.dll c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\java.exe c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\javaw.exe c:\\windows\\system32\\",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\javaws.exe c:\\windows\\system32\\"
+            ]
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {},
+        "ModifyKeys": {}
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers": {
+            "JreAppD": {
+                "Path": "%appdata%\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreComm": {
+                "Path": "%CommonProgramFiles(x86)%\\Oracle",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreProg": {
+                "Path": "%ProgramFiles%\\Java",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWin": {
+                "Path": "%winDir%\\system32\\WindowsAccessBridge-64.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin1": {
+                "Path": "%winDir%\\system32\\deployJava1.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin2": {
+                "Path": "%winDir%\\system32\\npdeployJava1.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin3": {
+                "Path": "%winDir%\\system32\\java.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin4": {
+                "Path": "%winDir%\\system32\\javaw.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin5": {
+                "Path": "%winDir%\\system32\\javaws.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreAppLow": {
+                "Path": "%USERPROFILE%\\Appdata\\Locallow\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWinIns": {
+                "Path": "%WinDir%\\Installer",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "RegistryDispositionLayers": {
+            "1InternetSettings": {
+                "Location": "HKEY_CURRENT_USER\\",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "2Content": {
+                "Location": "HKEY_LOCAL_MACHINE",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "SandboxFileExclusions": [],
+        "SandboxRegistryExclusions": []
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": []
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "C:\\NIP_software\\jEdit\\Output\\"
+    }
+}

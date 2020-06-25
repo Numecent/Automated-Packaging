@@ -1,0 +1,195 @@
+﻿{
+    "JsonConfigVersion": 2.0,
+    "PackagingNotes": [
+        "https://sdlc-esd.oracle.com/ESD6/JSCDL/jdk/8u251-b08/3d5a2bb8f8d4428bbe94aed7ec7ae784/jre-8u251-windows-x64.exe?GroupName=JSC&FilePath=/ESD6/JSCDL/jdk/8u251-b08/3d5a2bb8f8d4428bbe94aed7ec7ae784/jre-8u251-windows-x64.exe&BHost=javadl.sun.com&File=jre-8u251-windows-x64.exe&AuthParam=1589300382_303aad20478dd0c94fea60aaccb51977&ext=.exe",
+        "http://mirrors.xmission.com/eclipse/oomph/epp/2020-03/R/eclipse-inst-win64.exe",
+        "http://eclipse.mirror.rafal.ca/eclipse/downloads/drops4/R-4.15-202003050155/eclipse-SDK-4.15-win32-x86_64.zip"
+    ],
+    "ProjectSettings": {
+        "ProjectName": "eclipse_x64_NLR_English_Rel1",
+        "ProjectDescription": "Eclipse is an integrated development environment (IDE) used in computer programming. It contains a base workspace and an extensible plug-in system for customizing the environment. Eclipse is written mostly in Java and its primary use is for developing Java applications, but it may also be used to develop applications in other programming languages via plug-ins, including Ada, ABAP, C, C++, C#, Clojure, COBOL, D, Erlang, Fortran, Groovy, Haskell, JavaScript, Julia, Lasso, Lua, NATURAL, Perl, PHP, Prolog, Python, R, Ruby (including Ruby on Rails framework), Rust, Scala, and Scheme.",
+        "ProjectIconFile": "",
+        "ProjectFileName": "",
+        "ProjectFolder": "C:\\NIP_software\\eclipse\\Output\\",
+        "TargetCommand": {
+            "CommandLine": "c:\\Eclipse_cloud\\eclipse.exe ",
+            "WorkingFolder": ""
+        },
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [
+        "powershell.exe -NoP -NonI -Command Expand-Archive  'c:\\NIP_Software\\Eclipse\\installer_cfg\\eclipse.zip' 'c:\\eclipse_Cloud\\' "
+    ],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 500,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Classes\\\\Local Settings\\\\MuiCache",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\Network",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_USERS\\.DEFAULT",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run",
+            " HKEY_LOCAL_MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\JavaSoft\\\\Java Update"
+        ],
+        "FileExclusions": [
+            "%winDir%\\Installer\\*.msp",
+            "%winDir%\\Installer\\*.msi",
+            "%CommonProgramFiles(X86)%\\Java",
+            "%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\Java",
+            "%LocalAppData%\\Microsoft\\Internet Explorer",
+            "%LocalAppData%\\Microsoft\\Windows\\PowerShell",
+            "%ProgramData%\\Oracle"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "InstallerDownload": {
+        "DownloadURL": "http://eclipse.mirror.rafal.ca/eclipse/downloads/drops4/R-4.15-202003050155/eclipse-SDK-4.15-win32-x86_64.zip",
+        "DownloadPath": "C:\\NIP_software\\eclipse\\Installer_cfg\\eclipse.zip",
+        "SHA-256": "87837AB2D707C450475CA3EE3DF67C3B467485D7070E3468A7D945D97569500E"
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "PrerequisiteDownload": {
+            "Jre1.8_64bit": {
+                "DownloadURL": "https://oraclemirror.np.gy/jre8/jre-8u251-windows-x64.exe",
+                "DownloadPath": "C:\\NIP_software\\eclipse\\Installer_cfg\\jre-8u251-windows-x64.exe",
+                "SHA-256": "E1B646C9483352F5FD74D78579B38D4136ECFCFE3E32B8426C70D84D6647463F"
+            }
+        },
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": "",
+        "InstallerPath": "C:\\NIP_software\\eclipse\\Installer_cfg\\eclipse.zip",
+        "InstallerCommands": "",
+        "PostInstallActions": {
+            "Enabled": true,
+            "Commands": [
+                "%SOURCE%\\jre-8u251-windows-x64.exe /s",
+                "Setx PATH %PATH%;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\Program Files\\Java\\jre1.8.0_251\\bin /M ",
+                "MKlink  /D c:\\Eclipse_Cloud\\eclipse\\jre C:\\Program Files\\Java\\jre1.8.0_251 ",
+                " TIMEOUT /T 2 /NOBREAK >NUL",
+                "c:\\Eclipse_Cloud\\eclipse\\eclipsec.exe -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/eclipse/updates/3.6 -installIU org.eclipse.sdk.ide -tag InitialState -destination c:/Eclipse_cloud/ -profile SDKProfile  -profileProperties org.eclipse.update.install.features=true   -bundlepool c:/Eclipse_cloud/   -os win32 -ws win32 -arch x86_64 ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\dtplugin\\deployJava1.dll c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\dtpluginpdeployJava1.dll c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\java.exe c:\\windows\\system32\\ ",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\javaw.exe c:\\windows\\system32\\",
+                "copy C:\\Program Files\\Java\\jre1.8.0_251\\bin\\javaws.exe c:\\windows\\system32\\"
+            ]
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {},
+        "ModifyKeys": {}
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers": {
+            "JreAppD": {
+                "Path": "%appdata%\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreComm": {
+                "Path": "%CommonProgramFiles(x86)%\\Oracle",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreProg": {
+                "Path": "%ProgramFiles%\\Java",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWin": {
+                "Path": "%winDir%\\system32\\WindowsAccessBridge-64.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin1": {
+                "Path": "%winDir%\\system32\\deployJava1.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin2": {
+                "Path": "%winDir%\\system32\\npdeployJava1.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin3": {
+                "Path": "%winDir%\\system32\\java.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin4": {
+                "Path": "%winDir%\\system32\\javaw.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreWin5": {
+                "Path": "%winDir%\\system32\\javaws.exe",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreAppLow": {
+                "Path": "%USERPROFILE%\\Appdata\\Locallow\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWinIns": {
+                "Path": "%WinDir%\\Installer",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "RegistryDispositionLayers": {
+            "HKLM": {
+                "Location": "HKEY_LOCAL_MACHINE\\",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "HKCU": {
+                "Location": "HKEY_CURRENT_USER\\",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "SandboxFileExclusions": [
+            "?profile?\\eclipse-workspace",
+            "%systemdrive%\\eclipse-workspace"
+        ],
+        "SandboxRegistryExclusions": []
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": [
+                "eclipse.exe",
+                "eclipsec.exe",
+                "Java.exe",
+                "Javaw.exe",
+                "Javaws.exe"
+            ]
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "C:\\NIP_software\\eclipse\\Output\\"
+    }
+}

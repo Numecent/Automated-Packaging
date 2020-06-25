@@ -1,0 +1,113 @@
+﻿{
+    "JsonConfigVersion": 2.0,
+    "PackagingNotes": [
+        "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.8.2/threads-win32/sjlj/i686-4.8.2-release-win32-sjlj-rt_v3-rev1.7z"
+    ],
+    "ProjectSettings": {
+        "ProjectName": "MinGW_64bit_NLR_English_Rel1",
+        "ProjectDescription": "MinGW, A native Windows port of the GNU Compiler Collection (GCC), with freely distributable import libraries and header files for building native Windows applications; includes extensions to the MSVC runtime to support C99 functionality. All of MinGW's software will execute on the 64bit Windows platforms.",
+        "ProjectIconFile": "",
+        "ProjectFileName": "",
+        "ProjectFolder": "Output",
+        "TargetCommand": {
+            "CommandLine": "explorer.exe %PUBLIC%\\desktop\\mingw32.lnk",
+            "WorkingFolder": ""
+        },
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 300,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_USERS\\.DEFAULT"
+        ],
+        "FileExclusions": [
+            "%ProgramData%\\Microsoft\\Windows\\wfp"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "InstallerDownload": {
+        "DownloadURL": "https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/4.8.2/threads-win32/sjlj/i686-4.8.2-release-win32-sjlj-rt_v3-rev1.7z",
+        "DownloadPath": "C:\\NIP_Software\\MinGW\\Installer_cfg\\MinGW.7Z",
+        "SHA-256": "32C7973170415AEE94B6510B0219A4C0C524C4B7F8BF3C2984C6B3905F97FE32"
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "PrerequisiteDownload": {
+            "7ziplib": {
+                "DownloadURL": "https://www.7-zip.org/a/7za920.zip",
+                "DownloadPath": "C:\\NIP_Software\\MinGW\\Installer_cfg\\7ZLIB.ZIP",
+                "SHA-256": "2A3AFE19C180F8373FA02FF00254D5394FEC0349F5804E0AD2F6067854FF28AC"
+            }
+        },
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": "C:\\NIP_Software\\MinGW\\Installer_cfg\\7ZA.EXE e ",
+        "InstallerPath": "Installer_cfg\\MinGW.7Z",
+        "InstallerCommands": " -o%programfiles(X86)%",
+        "PostInstallActions": {
+            "Enabled": true,
+            "Commands": [
+                "::",
+                "powershell.exe -NoP -NonI -Command Expand-Archive  'C:\\NIP_Software\\MinGW\\Installer_cfg\\7ZLIB.ZIP' 'C:\\NIP_Software\\MinGW\\Installer_cfg\\'",
+                "C:\\NIP_Software\\MinGW\\Installer_cfg\\7za.EXE X C:\\NIP_Software\\MinGW\\Installer_cfg\\MinGW.7Z -o%programfiles(X86)%",
+                "setx /M PATH %programfiles(X86)%\\mingw32\\bin;%PATH%",
+                "set TARGET='%programfiles(X86)%\\mingw32\\mingw32.bat' ",
+                "set SHORTCUT='%PUBLIC%\\desktop\\mingw32.lnk'",
+                "set PWS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile",
+                "%PWS% -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()",
+                "del c:\\NIP_software\\MinGW\\Installer_cfg\\7ZLIB.ZIP",
+                "RD /S /q c:\\NIP_software\\MinGW\\Installer_cfg\\7ZLIB"
+            ]
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {
+            "batf": {
+                "Name": "mingw32.bat",
+                "Destination": "%programfiles(X86)%\\mingw32\\",
+                "Content": [
+                    "CMD.EXE /K \"%programfiles(X86)%\\mingw32\\bin\\windmc.exe\" "
+                ]
+            }
+        },
+        "ModifyKeys": {}
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers": {},
+        "RegistryDispositionLayers": {},
+        "SandboxFileExclusions": [],
+        "SandboxRegistryExclusions": []
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": []
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "Output"
+    }
+}

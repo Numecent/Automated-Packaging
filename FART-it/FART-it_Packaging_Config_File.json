@@ -1,16 +1,16 @@
 ﻿{
     "JsonConfigVersion": 2.0,
     "PackagingNotes": [
-        "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe "
+        "https://cfhcable.dl.sourceforge.net/project/fart-it/fart-it/1.99b/fart199b_win32.zip"
     ],
     "ProjectSettings": {
-        "ProjectName": "CodeBlocks_64bit_NLR_English_Rel1",
-        "ProjectDescription": "Code::Blocks is a free, open-source cross-platform IDE that supports multiple compilers including GCC, Clang and Visual C++. It is developed in C++ using wxWidgets as the GUI toolkit. Using a plugin architecture, its capabilities and features are defined by the provided plugins. Currently, Code::Blocks is oriented towards C, C++, and Fortran. It has a custom build system and optional Make support.",
+        "ProjectName": "FART-it_64bit_NLR_English_Rel1",
+        "ProjectDescription": "FART-it is a free Find And Replace Text command line utility. New & improved version of the well-known grep command, with advanced features such as: case-adaption of the replace string; find (& replace) in filenames, auto CVS edit.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\CodeBlocks\\Output\\",
+        "ProjectFolder": "C:\\NIP_software\\FART-it\\Output\\",
         "TargetCommand": {
-            "CommandLine": "%ProgramFiles%\\CodeBlocks\\codeblocks.exe",
+            "CommandLine": "cmd.exe /K %PUBLIC%\\desktop\\FART-it.lnk",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -30,17 +30,10 @@
             " HKEY_CURRENT_USER\\Software\\Perforce\\Environment",
             " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer",
             " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
-            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
             " HKEY_LOCAL_MACHINE\\SYSTEM",
             " HKEY_USERS\\.DEFAULT"
         ],
-        "FileExclusions": [
-            "%winDir%\\Installer\\*.msp",
-            "%winDir%\\Installer\\*.msi",
-            "%ProgramData%\\Package Cache",
-            "%appdata%\\Microsoft\\Windows\\Start Menu\\Programs\\CodeBlocks\\Uninstall CodeBlocks.lnk",
-            "%programfiles%\\codeblocks\\uninstall.exe"
-        ],
+        "FileExclusions": [],
         "ProcessExclusions": [],
         "ProcessInclusions": {
             "IncludeChildProccesses": true,
@@ -48,9 +41,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe",
-        "DownloadPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
-        "SHA-256": "0E5F140C9371C39F46DC00CD75D6A7A8782814BAEFDF604F923E9AC647C59E09"
+        "DownloadURL": "https://cfhcable.dl.sourceforge.net/project/fart-it/fart-it/1.99b/fart199b_win32.zip",
+        "DownloadPath": "C:\\NIP_software\\FART-it\\Installer_cfg\\FART-it.zip",
+        "SHA-256": "FEA5C189CA6A96A599BA4C7291911D1EBAF0E65869D74CAE563BB36F4DEF5224"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -59,14 +52,17 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": "  ",
-        "InstallerPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
-        "InstallerCommands": "/S  ",
+        "InstallerPrefix": "powershell.exe -NoP -NonI -Command Expand-Archive '",
+        "InstallerPath": "C:\\NIP_software\\FART-it\\Installer_cfg\\FART-it.zip",
+        "InstallerCommands": "' '%programfiles(X86)%\\FART-it_Cloud\\'  ",
         "PostInstallActions": {
             "Enabled": true,
             "Commands": [
-                "TIMEOUT /T 5 /NOBREAK >NUL",
-                "taskkill /F /IM CodeBlocks.exe /T"
+                "::",
+                "set TARGET='%programfiles(X86)%\\FART-it_Cloud\\fart.exe' ",
+                "set SHORTCUT='%PUBLIC%\\desktop\\FART-it.lnk'",
+                "set PWS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile",
+                "%PWS% -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()"
             ]
         },
         "DebugMode": false
@@ -95,6 +91,6 @@
         "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\CodeBlocks\\Output\\"
+        "OutputFolder": "C:\\NIP_software\\FART-it\\Output\\"
     }
 }

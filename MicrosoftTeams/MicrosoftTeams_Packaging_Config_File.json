@@ -1,16 +1,17 @@
 ﻿{
     "JsonConfigVersion": 2.0,
     "PackagingNotes": [
-        "https://desktop.githubusercontent.com/releases/2.5.2-41e70ee4/GitHubDesktopSetup.exe"
+        "https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi",
+        "https://docs.microsoft.com/en-us/microsoftteams/msi-deployment"
     ],
     "ProjectSettings": {
-        "ProjectName": "GitHubDesktop_64bit_NLR_English_Rel1",
-        "ProjectDescription": "Helix ALM, formerly called TestTrack, is application lifecycle management (ALM) software developed by Perforce. The software allows developers to manage requirements, defects, issues and testing during software development.",
+        "ProjectName": "MicrosoftTeams_64bit_NLR_English_Rel1",
+        "ProjectDescription": "Microsoft Teams, also referred to as simply Teams, is a unified communication and collaboration platform that combines persistent workplace chat, video meetings, file storage (including collaboration on files), and application integration. The service integrates with the Office 365 subscription office productivity suite and features extensions that can integrate with non-Microsoft products. Microsoft Teams is a competitor to services such as Slack and is the evolution and upgrade path from Microsoft Skype for Business.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\GitHubDesktop\\Output\\",
+        "ProjectFolder": "C:\\NIP_software\\MicrosoftTeams\\Output",
         "TargetCommand": {
-            "CommandLine": "%Localappdata%\\GitHubDesktop\\GitHubDesktop.exe",
+            "CommandLine": "explorer.exe %USERPROFILE%\\desktop\\Microsoft Teams.lnk",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -25,22 +26,20 @@
         "IgnoreChangesUnderInstallerPath": true,
         "ReplaceRegistryShortPaths": true,
         "RegistryExclusions": [
-            " HKEY_CURRENT_USER\\\\Software\\\\Classes\\\\Local Settings",
-            " HKEY_CURRENT_USER\\Software\\Microsoft",
-            " HKEY_CURRENT_USER\\Software\\Perforce\\Environment",
-            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer",
+            " HKEY_CURRENT_USER\\Software\\Microsoft\\RestartManager",
+            " HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Teams",
             " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
-            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
             " HKEY_LOCAL_MACHINE\\SYSTEM",
             " HKEY_USERS\\.DEFAULT"
         ],
         "FileExclusions": [
             "%winDir%\\Installer\\*.msp",
             "%winDir%\\Installer\\*.msi",
-            "%ProgramData%\\Package Cache",
-            "%LocalAppData%\\Microsoft",
+            "%programfiles(x86)%\\Teams Installer",
+            "%LocalAppData%\\Microsoft\\identityCache",
+            "%LocalAppData%\\Microsoft\\CLR_v4.0_32",
             "%LocalAppData%\\SquirrelTemp",
-            "%appdata%\\Microsoft\\Windows\\Recent\\CustomDestinations",
+            "%LocalAppData%\\Temp",
             "%ProgramData%\\Microsoft\\windows\\wfp"
         ],
         "ProcessExclusions": [],
@@ -50,9 +49,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://desktop.githubusercontent.com/releases/2.5.2-41e70ee4/GitHubDesktopSetup.exe",
-        "DownloadPath": "C:\\NIP_software\\GitHubDesktop\\Installer_cfg\\GitHubDesktop.exe",
-        "SHA-256": "F147DB69D318523C7FF3E311A0BD3E20AF80AAEE1776C984DE40F0FC12BA7546"
+        "DownloadURL": "https://statics.teams.cdn.office.net/production-windows-x64/1.3.00.13565/Teams_windows_x64.msi",
+        "DownloadPath": "C:\\NIP_software\\MicrosoftTeams\\Installer_cfg\\MicrosoftTeams.msi",
+        "SHA-256": "8B2C4EA38B619F3DE2A5C1B052A8DFE7A105807D6C363166A252702FC050214E"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -61,14 +60,16 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": "  ",
-        "InstallerPath": "C:\\NIP_software\\GitHubDesktop\\Installer_cfg\\GitHubDesktop.exe",
-        "InstallerCommands": " /S  ",
+        "InstallerPrefix": " msiexec /i ",
+        "InstallerPath": "C:\\NIP_software\\MicrosoftTeams\\Installer_cfg\\MicrosoftTeams.msi",
+        "InstallerCommands": " /qb-! OPTIONS=noAutoStart=true ALLUSERS=1 /norestart ",
         "PostInstallActions": {
             "Enabled": true,
             "Commands": [
+                "::",
                 "TIMEOUT /T 5 /NOBREAK >NUL",
-                "taskkill /F /IM GitHubDesktop.exe /T"
+                "%programfiles(x86)%\\Teams Installer\\Teams.exe -s",
+                "Reg Add HKCU\\SOFTWARE\\IM Providers /v DefaultIMApp /t REG_SZ /d Teams /f "
             ]
         },
         "DebugMode": false
@@ -82,15 +83,15 @@
         "DefaultServiceVirtualizationAction": "Register",
         "FileDispositionLayers": {
             "SetLocal": {
-                "Path": "%appdata%\\GitHub Desktop",
+                "Path": "%appdata%\\microsoft\\Teams",
                 "Layer": 1,
                 "Recurse": true
             }
         },
         "RegistryDispositionLayers": {},
         "SandboxFileExclusions": [
-            "?roamingappdata?\\GitHub Desktop",
-            "?profile?\\.gitconfig"
+            "?roamingappdata?\\microsoft\\Teams",
+            "?roamingappdata?\\microsoft Teams"
         ],
         "SandboxRegistryExclusions": []
     },
@@ -106,6 +107,6 @@
         "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\GitHubDesktop\\Output\\"
+        "OutputFolder": "C:\\NIP_software\\MicrosoftTeams\\Output"
     }
 }

@@ -1,0 +1,149 @@
+﻿{
+    "JsonConfigVersion": 2.0,
+    "PackagingNotes": [
+        "Does not support automatic downloading, but open the second link in a web browser to download manually",
+        "https://download.oracle.com/otn/java/jdk/8u251-b08/3d5a2bb8f8d4428bbe94aed7ec7ae784/jre-8u251-windows-i586.exe",
+        "http://sourceforge.net/projects/buddi/files/Buddi%20%28Stable%29/3.4.1.16/Buddi-3.4.1.16.zip"
+    ],
+    "ProjectSettings": {
+        "ProjectName": "Buddi_x64_NLR_English_Rel1",
+        "ProjectDescription": "Buddi is a personal finance and budgeting program, aimed at those who have little or no financial background. In making this software, I have attempted to make things as simple as possible, while still retaining enough functions to satisfy most home users.",
+        "ProjectIconFile": "",
+        "ProjectFileName": "",
+        "ProjectFolder": "C:\\NIP_software\\Buddi\\Output\\",
+        "TargetCommand": {
+            "CommandLine": "C:\\Program Files (x86)\\Java\\jre1.8.0_251\\bin\\javaw.exe -jar c:\\Buddi_Cloud\\Buddi.jar",
+            "WorkingFolder": ""
+        },
+        "TargetOS": [
+            "Win7-x64",
+            "Win8-x64"
+        ]
+    },
+    "PreCaptureCommands": [],
+    "CaptureSettings": {
+        "CaptureTimeoutSec": 300,
+        "CaptureAllProcesses": false,
+        "IgnoreChangesUnderInstallerPath": true,
+        "ReplaceRegistryShortPaths": true,
+        "RegistryExclusions": [
+            " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Classes\\\\Local Settings\\\\MuiCache",
+            " HKEY_CURRENT_USER\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\Network",
+            " HKEY_LOCAL_MACHINE\\SYSTEM",
+            " HKEY_USERS\\.DEFAULT"
+        ],
+        "FileExclusions": [
+            "%winDir%\\Installer\\*.msp",
+            "%winDir%\\Installer\\*.msi",
+            "%CommonProgramFiles(X86)%\\Java",
+            "%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\Java",
+            "%LocalAppData%\\Microsoft\\Internet Explorer",
+            "%LocalAppData%\\Microsoft\\Windows\\PowerShell",
+            "%ProgramData%\\Oracle"
+        ],
+        "ProcessExclusions": [],
+        "ProcessInclusions": {
+            "IncludeChildProccesses": true,
+            "Include": []
+        }
+    },
+    "InstallerDownload": {
+        "DownloadURL": "",
+        "DownloadPath": "",
+        "SHA-256": ""
+    },
+    "CaptureCommands": {
+        "Enabled": true,
+        "PrerequisiteDownload": {
+            "Jre1.8_64bit": {
+                "DownloadURL": "https://oraclemirror.np.gy/jre8/jre-8u251-windows-i586.exe",
+                "DownloadPath": "C:\\NIP_software\\Buddi\\Installer_cfg\\jre-8u251-windows-i586.exe",
+                "SHA-256": "E1B646C9483352F5FD74D78579B38D4136ECFCFE3E32B8426C70D84D6647463F"
+            }
+        },
+        "Prerequisites": {
+            "Enabled": false,
+            "Commands": []
+        },
+        "InstallerPrefix": "powershell.exe -NoP -NonI -Command Expand-Archive '",
+        "InstallerPath": "C:\\NIP_software\\Buddi\\Installer_cfg\\Buddi.zip",
+        "InstallerCommands": "' 'C:\\Buddi_Cloud\\'",
+        "PostInstallActions": {
+            "Enabled": true,
+            "Commands": [
+                "::",
+                "C:\\NIP_software\\Buddi\\Installer_cfg\\jre-8u251-windows-i586.exe /s"
+            ]
+        },
+        "DebugMode": false
+    },
+    "ModifyAssets": {
+        "AddFiles": {},
+        "ModifyKeys": {}
+    },
+    "VirtualizationSettings": {
+        "DefaultDispositionLayer": 3,
+        "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers": {
+            "JreAppD": {
+                "Path": "%appdata%\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreComm": {
+                "Path": "%CommonProgramFiles(X86)%\\Oracle",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreProg": {
+                "Path": "%ProgramFiles(x86)%\\Java",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWin": {
+                "Path": "%winDir%\\sysWOW64\\WindowsAccessBridge-32.dll",
+                "Layer": 4,
+                "Recurse": false
+            },
+            "JreAppLow": {
+                "Path": "%USERPROFILE%\\Appdata\\Locallow\\Sun",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "JreWinIns": {
+                "Path": "%WinDir%\\",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "RegistryDispositionLayers": {
+            "HKLM": {
+                "Location": "HKEY_LOCAL_MACHINE\\",
+                "Layer": 4,
+                "Recurse": true
+            },
+            "HKCU": {
+                "Location": "HKEY_CURRENT_USER\\",
+                "Layer": 4,
+                "Recurse": true
+            }
+        },
+        "SandboxFileExclusions": [],
+        "SandboxRegistryExclusions": []
+    },
+    "SecurityOverrideSettings": {
+        "AllowAccessLayer4": {
+            "AllowReadAndCopy": true,
+            "Proccesses": []
+        },
+        "DenyAccessLayer3": []
+    },
+    "OutputSettings": {
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
+        "OutputFileNameNoExt": "",
+        "FinalizeIntoSTP": true,
+        "OutputFolder": "C:\\NIP_software\\Buddi\\Output\\"
+    }
+}

@@ -1,16 +1,14 @@
 ﻿{
     "JsonConfigVersion": 2.0,
-    "PackagingNotes": [
-        "https://www.alice.org/wp-content/uploads/2019/03/Alice2_5e.zip"
-    ],
+    "PackagingNotes": [],
     "ProjectSettings": {
-        "ProjectName": "Alice2_64bit_NLR_English_Rel1",
-        "ProjectDescription": "Alice2Alice is an object-based educational programming language with an integrated development environment (IDE). Alice uses a drag and drop environment to create computer animations using 3D models. The software was developed first at University of Virginia in 1994, then Carnegie Mellon (from 1997), by a research group led by Randy Pausch.",
+        "ProjectName": "Drupal_64bit_NIP",
+        "ProjectDescription": "Drupal is a free and open-source web content management framework written in PHP and distributed under the GNU General Public License. Drupal provides a back-end framework for at least 2.3% of all websites worldwide – ranging from personal blogs to corporate, political, and government sites. Systems also use Drupal for knowledge management and for business collaboration.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\Alice2\\Output\\",
+        "ProjectFolder": "",
         "TargetCommand": {
-            "CommandLine": "%programfiles(X86)%\\Alice2_Cloud\\Alice 2.5\\Alice.exe",
+            "CommandLine": "explorer.exe %PUBLIC%\\desktop\\Drupal.lnk",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -33,9 +31,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://www.alice.org/wp-content/uploads/2019/03/Alice2_5e.zip",
-        "DownloadPath": "C:\\NIP_software\\Alice2\\Installer_cfg\\Alice2.zip",
-        "SHA-256": "8CB23FF7ACBD37BD11460B8EA71CC6FA41146BA5FDFB603C88959564654C4A63"
+        "DownloadURL": "https://ftp.drupal.org/files/projects/drupal-8.8.5.zip",
+        "DownloadPath": "C:\\NIP_software\\Drupal\\Installer_cfg\\Drupal.zip",
+        "SHA-256": "5DAE6BA8F8515089CAF91334788BFE3248E22D106421276D8AD668C2BD2611F9"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -44,16 +42,18 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": "powershell.exe -NoP -NonI -Command Expand-Archive '",
-        "InstallerPath": "C:\\NIP_software\\Alice2\\Installer_cfg\\Alice2.zip",
-        "InstallerCommands": "' '%programfiles(X86)%\\Alice2_Cloud\\' ",
+        "InstallerPrefix": "REM",
+        "InstallerPath": "c:\\NIP_software\\Drupal\\Installer_Cfg\\Drupal.exe",
+        "InstallerCommands": " /S",
         "PostInstallActions": {
             "Enabled": true,
             "Commands": [
                 "",
                 "::",
-                "set TARGET='%programfiles(X86)%\\Alice2_Cloud\\Alice 2.5\\Alice.exe' ",
-                "set SHORTCUT='%PUBLIC%\\desktop\\Alice2.lnk'",
+                "powershell.exe -NoP -NonI -Command Expand-Archive  '%SOURCE%\\Drupal.zip' 'c:\\WAM\\php\\' ",
+                "copy %SOURCE%\\explorer.bat c:\\WAM\\php\\",
+                "set TARGET='C:\\WAM\\php\\explorer.bat'",
+                "set SHORTCUT='%PUBLIC%\\desktop\\Drupal.lnk'",
                 "set PWS=powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile",
                 "%PWS% -Command $ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut(%SHORTCUT%); $S.TargetPath = %TARGET%; $S.Save()"
             ]
@@ -80,10 +80,10 @@
         "DenyAccessLayer3": []
     },
     "OutputSettings": {
-        "EncryptionMethod": "None",
-        "CompressionMethod": "None",
+        "EncryptionMethod": "AES-256-Enhanced",
+        "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\Alice2\\Output\\"
+        "OutputFolder": "c:\\NIP_software\\Drupal\\output\\"
     }
 }

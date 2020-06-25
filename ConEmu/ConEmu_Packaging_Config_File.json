@@ -1,16 +1,16 @@
 ﻿{
     "JsonConfigVersion": 2.0,
     "PackagingNotes": [
-        "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe "
+        "https://www.fosshub.com/ConEmu.html?dwl=ConEmuSetup.191012.exe "
     ],
     "ProjectSettings": {
-        "ProjectName": "CodeBlocks_64bit_NLR_English_Rel1",
-        "ProjectDescription": "Code::Blocks is a free, open-source cross-platform IDE that supports multiple compilers including GCC, Clang and Visual C++. It is developed in C++ using wxWidgets as the GUI toolkit. Using a plugin architecture, its capabilities and features are defined by the provided plugins. Currently, Code::Blocks is oriented towards C, C++, and Fortran. It has a custom build system and optional Make support.",
+        "ProjectName": "ConEmu_64bit_NLR_English_Rel1",
+        "ProjectDescription": "ConEmu (short for Console emulator) is a free and open-source tabbed terminal emulator for Windows. ConEmu presents multiple consoles and simple GUI applications as one customizable GUI window with tabs and a status bar. It also provides emulation for ANSI escape codes for color, bypassing the capabilities of the standard Windows Console Host to provide 256 and 24-bit color in Windows.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\CodeBlocks\\Output\\",
+        "ProjectFolder": "C:\\NIP_software\\ConEmu\\Output\\",
         "TargetCommand": {
-            "CommandLine": "%ProgramFiles%\\CodeBlocks\\codeblocks.exe",
+            "CommandLine": "%ProgramFiles%\\ConEmu\\ConEmu64.exe",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -38,8 +38,7 @@
             "%winDir%\\Installer\\*.msp",
             "%winDir%\\Installer\\*.msi",
             "%ProgramData%\\Package Cache",
-            "%appdata%\\Microsoft\\Windows\\Start Menu\\Programs\\CodeBlocks\\Uninstall CodeBlocks.lnk",
-            "%programfiles%\\codeblocks\\uninstall.exe"
+            "%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\ConEmu\\Uninstall ConEmu x64.lnk"
         ],
         "ProcessExclusions": [],
         "ProcessInclusions": {
@@ -48,9 +47,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://managedway.dl.sourceforge.net/project/codeblocks/Binaries/20.03/Windows/codeblocks-20.03-setup.exe",
-        "DownloadPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
-        "SHA-256": "0E5F140C9371C39F46DC00CD75D6A7A8782814BAEFDF604F923E9AC647C59E09"
+        "DownloadURL": "https://www.fosshub.com/ConEmu.html?dwl=ConEmuSetup.191012.exe",
+        "DownloadPath": "C:\\NIP_software\\ConEmu\\Installer_cfg\\ConEmu.exe",
+        "SHA-256": "73BEFD3FAA99E3AA21D6F164B39A96C90CF4BE2F3B32A1528BD5CD9ADCAA68C9"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -59,14 +58,19 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": "  ",
-        "InstallerPath": "C:\\NIP_software\\CodeBlocks\\Installer_cfg\\CodeBlocks.exe",
+        "InstallerPrefix": " REM ",
+        "InstallerPath": "C:\\NIP_software\\ConEmu\\Installer_cfg\\ConEmu.exe",
         "InstallerCommands": "/S  ",
         "PostInstallActions": {
             "Enabled": true,
             "Commands": [
-                "TIMEOUT /T 5 /NOBREAK >NUL",
-                "taskkill /F /IM CodeBlocks.exe /T"
+                "rem ",
+                "%SOURCE%\\ConEmu.exe /p:x64,adm /qn REBOOT=ReallySuppress ",
+                "TIMEOUT /T 3 /NOBREAK >NUL",
+                "rem powershell -Command (gc 'c:\\program files\\ConEmu\\ConEmu.xml') -replace '<value name=Update.CheckOnStartup type=hex data=01/>', '<value name=Update.CheckOnStartup type=hex data=00/>' | Out-File -encoding ASCII 'c:\\program files\\ConEmu\\ConEmu.xml'",
+                "rem powershell -Command (gc 'c:\\program files\\ConEmu\\ConEmu.xml') -replace '<value name=Update.CheckHourly type=hex data=01/>', '<value name=Update.CheckHourly type=hex data=00/>' | Out-File -encoding ASCII 'c:\\program files\\ConEmu\\ConEmu.xml'",
+                "del C:\\Program Files\\ConEmu\\ConEmu.xml ",
+                "copy %SOURCE%\\ConEmu.xml C:\\Program Files\\ConEmu\\ConEmu.xml "
             ]
         },
         "DebugMode": false
@@ -95,6 +99,6 @@
         "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\CodeBlocks\\Output\\"
+        "OutputFolder": "C:\\NIP_software\\ConEmu\\Output\\"
     }
 }

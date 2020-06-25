@@ -52,15 +52,16 @@ The following is an example with comments:
 
 **Project Settings**
 ```
-    "ProjectSettings": {
-        "ProjectName": "Evernote_6-21-2-8717_32bit_x64_NLR_English_Rel1",
-        "ProjectDescription": "Evernote is an app designed for note taking and organizing task management.",
-        "IconFile": "C:\\Program Files (x86)\\Evernote\\Evernote\\Evernote.exe",
+"ProjectSettings": {
+        "ProjectName": "7-Zip_19-0_64bit_x64_NLR_English_Rel1",
+        "ProjectDescription": "7-Zip is a free and open-source file archiver utility used to place groups of files within compressed containers known as archives.",
+        "ProjectIconFile": "C:\\Program Files\\7-Zip\\7zFM.exe",
         "ProjectFileName": "",
-        "WorkingFolder": "C:\\Program Files (x86)\\Evernote\\Evernote\\",
-        "ProjectFolder": "C:\\NIP_software\\Evernote\\Output",
-        "CommandLine": "C:\\Program Files (x86)\\Evernote\\Evernote\\Evernote.exe",
-        "CommandLineParams": "",
+        "ProjectFolder": "",
+        "TargetCommand":{
+            "CommandLine": "C:\\Program Files\\7-Zip\\7zFM.exe",
+            "WorkingFolder": "C:\\Program Files\\7-Zip\\"
+        },
         "TargetOS": [
             "Win7-x64",
             "Win8-x64"
@@ -113,10 +114,27 @@ When `ReplaceRegistryShortPaths` is false, studio will leave registry path short
 
 Keys, files, and processes placed in their respective exclusion arrays will be ignored during the capture process, while processes added in the `Include` field will be added to the capture.
 
+**InstallerDownload**
+```
+"InstallerDownload":{
+        "DownloadURL": "https://www.7-zip.org/a/7z1900.exe", 
+        "DownloadPath": "C:\\NIP_software\\Downloads\\",
+        "SHA-256": "759AA04D5B03EBEEE13BA01DF554E8C962CA339C74F56627C8BED6984BB7EF80"
+    },
+```
+This section contains information to download an installer in the event that one is not locally provided. In this case, the installer will be downloaded to the `DownloadPath` parameter. If no path is provided, the installer will be placed in the `InstallerPath` location inside of `CaptureCommands`, or use the `-installer_path` parameter value. 
+
 **CaptureCommands**
 ```
     "CaptureCommands": {
         "Enabled": true,
+        "PrerequisiteDownload": {
+            "Jre1.8_64bit": {
+                "DownloadURL": "https://oraclemirror.np.gy/jre8/jre-8u251-windows-i586.exe",
+                "DownloadPath": "C:\\NIP_software\\LibreOffice\\Installer_cfg\\jre-8u251-windows-i586.exe",
+                "SHA-256": ""
+            }
+        },
         "Prerequisites": {
             "Enabled": false,
             "Commands": []
@@ -132,6 +150,8 @@ Keys, files, and processes placed in their respective exclusion arrays will be i
     },
 ```
 In order to speed up installation and seamlessly package applications, bat file are generated to execute installers quietly. Additionally, any commands executed by these bat files will be included in the capture. If this feature is not desired it can be disabled by the `Enabled` field. In this case, the user would still need to click through the installer as a normal installation.
+
+Some applcations may also require prerequisites in order to function properly. These may be created under the PrerequisiteDownload section. These will be downloaded before packaging begins so they will be ready to use in the packaging process. Adding commands to the `Prerequisites` field will install them before the primary installer. Placing commands in the `PostInstallActions` field will install them after. 
 
 Different installers require different parameters in order to install silently. 
 
@@ -202,6 +222,20 @@ Key modifications included in `ModifyKeys` will also be included in the capture.
     "VirtualizationSettings": {
         "DefaultDispositionLayer": 3,
         "DefaultServiceVirtualizationAction": "Register",
+        "FileDispositionLayers":{
+            "Fonts": {
+                "Path": "C:\\Windows\\Fonts",
+                "Layer": 1,
+                "Recurse": true
+            }
+        },
+        "RegistryDispositionLayers":{
+            "AntiMalware":{
+                "Location": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Antimalware",
+                "Layer": 3,
+                "Recurse": false
+            }
+        },
         "SandboxFileExclusions": [],
         "SandboxRegistryExclusions": []
     },
@@ -250,14 +284,23 @@ Path to the JSON configuration file.
 `-installer_path ‘path\to\installer’`
 Using this parameter will override the value stored in CaptureCommands.InstallerPath
 
+`-installer_url 'https:\\download.installer.com'`
+Using this parameter will override the value stored in InstallerDownload.DownloadURL
+
 `-output_folder ‘path\to\output’`
 Using this parameter will override the value stored in OutputSettings.OutputFolder
 
-`-working_folder ‘path\to\working\folder\’`
-Using this parameter will override value stored in ProjectSettings.WorkingFolder
+`-root_folder 'path\to\project\folder'`
+This parameter will set the root folder for the project, and place project related files inside of it
 
 `-appset_name ‘custom appset name without extension’`
 Using this parameter will override value stored in OutputSettings.OutputFileNameNoExt and will save the stp file with the provided name
+
+`-offline 'true'`
+This parameter prevents internet related functions. These include: downloading prescript, dat updaates, installer downloads, and installer pre-req downloads. 
+
+`-skip_verification 'true'`
+This parameter will disable verifying the downloaded installer file against the SHA-256 hash value stored inside the JSON.
 
 `-debug_mode ‘true’`
 Using this parameter includes more detailed output from the console, prevents generated files from being deleted upon packaging completion, and prevents dat files from being reverted to their pre-capture states.

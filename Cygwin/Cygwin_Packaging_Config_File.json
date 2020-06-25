@@ -1,16 +1,16 @@
 ﻿{
     "JsonConfigVersion": 2.0,
     "PackagingNotes": [
-        "https://downloads.codelite.org/downloads.php?windows_64 "
+        "https://cygwin.com/setup-x86_64.exe"
     ],
     "ProjectSettings": {
-        "ProjectName": "CodeLiteIDE_64bit_NLR_English_Rel1",
-        "ProjectDescription": "CodeLite is a free and open-source IDE for the C, C++, PHP, and JavaScript (Node.js) programming languages.",
+        "ProjectName": "Cygwin_x64_NLR_English_Rel1",
+        "ProjectDescription": "Cygwin Cygwin is a POSIX-compatible programming and runtime environment that runs natively on Microsoft Windows. Under Cygwin, source code designed for Unix-like operating systems may be compiled and run natively with minimal modification.",
         "ProjectIconFile": "",
         "ProjectFileName": "",
-        "ProjectFolder": "C:\\NIP_software\\CodeLiteIDE\\Output\\",
+        "ProjectFolder": "C:\\NIP_software\\Cygwin\\Output\\",
         "TargetCommand": {
-            "CommandLine": "%ProgramFiles%\\CodeLite\\codelite.exe",
+            "CommandLine": "%programfiles%\\Cygwin\\bin\\mintty.exe -i /Cygwin-Terminal.ico -",
             "WorkingFolder": ""
         },
         "TargetOS": [
@@ -20,27 +20,17 @@
     },
     "PreCaptureCommands": [],
     "CaptureSettings": {
-        "CaptureTimeoutSec": 300,
+        "CaptureTimeoutSec": 500,
         "CaptureAllProcesses": false,
         "IgnoreChangesUnderInstallerPath": true,
         "ReplaceRegistryShortPaths": true,
         "RegistryExclusions": [
-            " HKEY_CURRENT_USER\\Software\\Classes",
-            " HKEY_CURRENT_USER\\Software\\Microsoft",
-            " HKEY_CURRENT_USER\\Software\\Perforce\\Environment",
-            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer",
             " HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Component Based Servicing",
-            " HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall",
-            " HKEY_LOCAL_MACHINE\\SYSTEM",
-            " HKEY_USERS\\.DEFAULT"
+            " HKEY_CURRENT_USER",
+            " HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer"
         ],
         "FileExclusions": [
-            "%winDir%\\Installer\\*.msp",
-            "%winDir%\\Installer\\*.msi",
-            "%ProgramData%\\Package Cache",
-            "%programdata%\\Microsoft\\Windows\\Start Menu\\Programs\\CodeLite\\Uninstall  CodeLite.lnk",
-            "%programfiles%\\CodeLite\\unins000.exe",
-            "%programfiles%\\CodeLite\\unins000.dat"
+            "C:\\NIP_software"
         ],
         "ProcessExclusions": [],
         "ProcessInclusions": {
@@ -49,9 +39,9 @@
         }
     },
     "InstallerDownload": {
-        "DownloadURL": "https://downloads.codelite.org/downloads.php?windows_64",
-        "DownloadPath": "C:\\NIP_software\\CodeLiteIDE\\Installer_cfg\\CodeLiteIDE.exe",
-        "SHA-256": "7A5A72FA48D54466DDF2EA60A84463C41703794051AB2DCC12E9C98F7C5D4750"
+        "DownloadURL": "https://cygwin.com/setup-x86_64.exe",
+        "DownloadPath": "C:\\NIP_software\\Cygwin\\Installer_cfg\\Cygwin.exe",
+        "SHA-256": "2431DE4597A2162F3E1D60AF90F638B41677265B07CC66FCB0231FDDE452C841"
     },
     "CaptureCommands": {
         "Enabled": true,
@@ -60,11 +50,11 @@
             "Enabled": false,
             "Commands": []
         },
-        "InstallerPrefix": " ",
-        "InstallerPath": "C:\\NIP_software\\CodeLiteIDE\\Installer_cfg\\CodeLiteIDE.exe",
-        "InstallerCommands": " /SILENT ",
+        "InstallerPrefix": "",
+        "InstallerPath": "C:\\NIP_software\\Cygwin\\Installer_cfg\\Cygwin.exe",
+        "InstallerCommands": " --site http://cygwin.mirror.constant.com --quiet-mode --root %PROGRAMFILES%\\cygwin --arch x86_64 --verbose ",
         "PostInstallActions": {
-            "Enabled": true,
+            "Enabled": false,
             "Commands": []
         },
         "DebugMode": false
@@ -93,6 +83,6 @@
         "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
-        "OutputFolder": "C:\\NIP_software\\CodeLiteIDE\\Output\\"
+        "OutputFolder": "C:\\NIP_software\\Cygwin\\Output\\"
     }
 }
