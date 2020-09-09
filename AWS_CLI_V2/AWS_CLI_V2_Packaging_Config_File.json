@@ -92,8 +92,8 @@
         "DenyAccessLayer3": []
     },
     "OutputSettings": {
-        "EncryptionMethod": "AES-256-Enhanced",
-        "CompressionMethod": "LZMA",
+        "EncryptionMethod": "best",
+        "CompressionMethod": "best",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
         "OutputFolder": "C:\\NIP_software\\AWS_CLI_V2\\Output\\"
