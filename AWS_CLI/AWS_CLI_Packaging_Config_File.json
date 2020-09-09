@@ -92,7 +92,7 @@
         "DenyAccessLayer3": []
     },
     "OutputSettings": {
-        "EncryptionMethod": "best",
+        "EncryptionMethod": "AES-256-Enhanced",
         "CompressionMethod": "best",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
