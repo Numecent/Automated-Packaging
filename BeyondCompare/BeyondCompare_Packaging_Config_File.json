@@ -85,8 +85,8 @@
                                      "DenyAccessLayer3":  []
                                  },
     "OutputSettings":  {
-                           "EncryptionMethod":  "AES-256-Enhanced",
-                           "CompressionMethod":  "LZMA",
+                           "EncryptionMethod":  "Best",
+                           "CompressionMethod":  "Best",
                            "OutputFileNameNoExt":  "",
                            "FinalizeIntoSTP":  true,
                            "OutputFolder":  "c:\\NIP_software\\BeyondCompare\\output\\"
