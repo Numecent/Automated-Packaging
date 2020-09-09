@@ -93,7 +93,7 @@
     },
     "OutputSettings": {
         "EncryptionMethod": "AES-256-Enhanced",
-        "CompressionMethod": "best",
+        "CompressionMethod": "LZMA",
         "OutputFileNameNoExt": "",
         "FinalizeIntoSTP": true,
         "OutputFolder": "C:\\NIP_software\\AWS_CLI_V2\\Output\\"
