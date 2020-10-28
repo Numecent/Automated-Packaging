@@ -57,7 +57,7 @@ param (
 )
 
 $NIPS_SCRIPT_VERSION = 1.0         #Version number for nips, this will be stored in revnotes
-$SUPORTED_JSON = 1.0, 1.1         #Add supported version in array
+$SUPORTED_JSON = 1.0, 1.1, 2.0     #Add supported version in array
 $prescriptURL = "https://raw.githubusercontent.com/Numecent/Automated-Packaging/master/CloudpagingStudio-prep.ps1"
 $datFilesDirectoryURL = "https://raw.githubusercontent.com/Numecent/Automated-Packaging/master/Studio%20DAT%20Files/"
 
