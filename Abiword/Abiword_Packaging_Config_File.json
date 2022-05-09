@@ -54,7 +54,7 @@
             "Vc08_x86": {
                 "DownloadURL": "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe",
                 "DownloadPath": "C:\\NIP_software\\Abiword\\Installer_cfg\\VC08X86.exe",
-                "SHA-256": "C6A7E484F4D84883BC1205BCCEA3114C0521025712922298EDE9B2A1CD632357"
+                "SHA-256": "8742bcbf24ef328a72d2a27b693cc7071e38d3bb4b9b44dec42aa3d2c8d61d92"
             }
         },
             "Prerequisites": {
@@ -67,8 +67,10 @@
             "InstallerPath": "c:\\NIP_software\\Abiword\\Installer_Cfg\\Abiword.exe",
             "InstallerCommands": " /S",
             "PostInstallActions": {
-                "Enabled": false,
-                "Commands": []
+                "Enabled": true,
+                "Commands": [
+						"c:\\NIP_software\\Abiword\\Installer_Cfg\\VC08X86.exe /q /norestart"
+				]
             },
             "DebugMode": false
         },
