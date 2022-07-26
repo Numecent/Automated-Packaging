@@ -482,8 +482,8 @@ switch ($PsCmdlet.ParameterSetName)
 
                         # Append DAT files
                         Add-Content $fileDAT "`r`n`n# -------------------------"
-						Add-Content $fileDAT "FILTER_ACTION EXCLUDE"
-						Add-Content $fileDAT "`r`n`n# -------------------------"
+                        Add-Content $fileDAT "FILTER_ACTION EXCLUDE"
+                        Add-Content $fileDAT "`r`n`n# -------------------------"
                         Add-Content $fileDAT "`n# Filters for $ProjectName`n"
                         #Create Output String and format for writing to DAT file
 
@@ -516,8 +516,8 @@ switch ($PsCmdlet.ParameterSetName)
 
                         # Append DAT files
                         Add-Content $regDAT "`r`n`n# -------------------------"
-						Add-Content $regDAT "FILTER_ACTION EXCLUDE"
-						Add-Content $regDAT "`r`n`n# -------------------------"
+                        Add-Content $regDAT "FILTER_ACTION EXCLUDE"
+                        Add-Content $regDAT "`r`n`n# -------------------------"
                         Add-Content $regDAT "`n# Filters for $ProjectName`n"
                         #Create Output String and format for writing to DAT file
 
@@ -669,7 +669,6 @@ switch ($PsCmdlet.ParameterSetName)
                         }
 
                         # Append DAT files
-						#Add-Content $fileexcDAT "FILTER_ACTION EXCLUDE"
                         Add-Content $fileexcDAT "`r`n`n# -------------------------"
                         Add-Content $fileexcDAT "`n# Settings for $ProjectName`n"
                         #Create the String and format for writing to DAT file
@@ -686,7 +685,6 @@ switch ($PsCmdlet.ParameterSetName)
                         }
 
                         # Append DAT files
-						#Add-Content $regexDAT "FILTER_ACTION EXCLUDE"
                         Add-Content $regexDAT "`r`n`n# -------------------------"
                         Add-Content $regexDAT "`n# Settings for $ProjectName`n"
                         #Create Output String and format for writing to DAT file
