@@ -579,7 +579,7 @@ switch ($PsCmdlet.ParameterSetName)
                     # Check if system installation processes should be captured (by default, will capture these processes)
                     if (-NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
                     {
-						# Back the DAT file
+                        # Back the DAT file
                         if (-NOT (Test-Path -Path $procfiltDAT".bak"))
                         {
                             Write-Output "Backing up $procfiltDAT"
