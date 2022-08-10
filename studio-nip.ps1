@@ -575,6 +575,29 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $procexDAT
                     }
+                    
+                    # Check if system installation processes should be captured (by default, will capture these processes)
+                    if (-NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
+                    {
+						# Back the DAT file
+                        if (-NOT (Test-Path -Path $procfiltDAT".bak"))
+                        {
+                            Write-Output "Backing up $procfiltDAT"
+                            Copy-Item -Path $procfiltDAT -Destination $procfiltDAT".bak"
+                        }
+                        
+                       # Captures all initial comments with #* in the process filter
+                       # Will break on the first instance of anything that is not "#*"
+                       Set-Content $procfiltDAT -Value $(
+                       @(
+                         switch -Wildcard -File $procfiltDAT {
+                         '#*' { $_ }
+                         default { break }
+                         }
+                         # Append the dummy process string to the file
+                        ) + "`n`n# Dummy process inserted here", "`n EMPTY_PROCESS.EXE"
+                       )
+                    }
 
                     # Find DAT process filter updates
                     if ($json.CaptureSettings.ProcessInclusions.Include)
