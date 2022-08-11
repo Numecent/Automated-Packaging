@@ -810,7 +810,6 @@ if(-NOT ($debug_mode))
     Restore-Dat($regexDAT)
     Restore-Dat($procexDAT)
     Restore-Dat($procfiltDAT)
-    Restore-Dat($procfiltDAT)
     Restore-Dat($fileexcDAT)
 }
 # Check if packaging was successful
