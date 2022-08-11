@@ -108,7 +108,7 @@ The Capture Settings area contains the settings about how Cloudpaging Studio sho
 
 `CaptureAllProcesses` specifies if studio should capture all the processes it detects when true, or to exclusively capture the installer and its child processes when false.
 
-For most installations temporary files will be generated at the same path as the installer. If `IgnoreChangesUnderInstallerPath` is false, studio will capture these changes. In addition, generally all related system process related to installers, such as MSI, will be captured. This can be disabled by setting 'IncludeSystemInstallationProcesses' as false.
+For most installations temporary files will be generated at the same path as the installer. If `IgnoreChangesUnderInstallerPath` is false, studio will capture these changes. In addition, generally all related system process related to installers, such as MSI, will be captured. This can be disabled by setting `IncludeSystemInstallationProcesses` as false.
 
 When `ReplaceRegistryShortPaths` is false, studio will leave registry path shortcuts in the project rather than containing the full registry key path.
 
