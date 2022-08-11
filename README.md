@@ -1,4 +1,4 @@
-# Cloudpaging Automated-Packaging –PREVIEW–
+# Cloudpaging Automated-Packaging
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
 As this is a preview Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
@@ -82,6 +82,7 @@ Commands added to the array in this section will be copied to a bat file and exe
     "CaptureSettings": {
         "CaptureTimeoutSec": 300,
         "CaptureAllProcesses": false,
+	"IncludeSystemInstallationProcesses": true,
         "IgnoreChangesUnderInstallerPath": true,
         "ReplaceRegistryShortPaths": true,
         "RegistryExclusions": [
@@ -107,7 +108,7 @@ The Capture Settings area contains the settings about how Cloudpaging Studio sho
 
 `CaptureAllProcesses` specifies if studio should capture all the processes it detects when true, or to exclusively capture the installer and its child processes when false.
 
-For most installations temporary files will be generated at the same path as the installer. If `IgnoreChangesUnderInstallerPath` is false, studio will capture these changes.
+For most installations temporary files will be generated at the same path as the installer. If `IgnoreChangesUnderInstallerPath` is false, studio will capture these changes. In addition, generally all related system process related to installers, such as MSI, will be captured. This can be disabled by setting 'IncludeSystemInstallationProcesses' as false.
 
 When `ReplaceRegistryShortPaths` is false, studio will leave registry path shortcuts in the project rather than containing the full registry key path.
 
