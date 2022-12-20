@@ -10,7 +10,7 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision December 12, 2022
+# Revision December 19, 2022
 
 <#
 .SYNOPSIS
@@ -566,8 +566,10 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $procexDAT
                     }
+                    
+                    ## Format 1.1 feature backwards compatible
                     # Check if system installation processes should be captured (by default, will capture these processes)
-                    if (-NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
+                    if(-NOT ([string]::IsNullOrEmpty($json.CaptureSettings.IncludeSystemInstallationProcesses)) -AND -NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
                     {
                         # Back the DAT file
                         if(-NOT (Test-Path -Path $procfiltDAT".bak"))
