@@ -1,6 +1,6 @@
-#   Cloudpaging Studio - Auto-package
+#   Cloudpaging Studio - Automated NIP (Non-interactive Packaging)
 #
-#   Copyright (c) 2020 Numecent, Inc.  All rights reserved.
+#   Copyright (c) 2022 Numecent, Inc.  All rights reserved.
 #
 #   This file is an unpublished work and the proprietary and confidential
 #   information of Numecent.  Should this source code become published,
@@ -10,11 +10,11 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision March 13, 2020
+# Revision December 12, 2022
 
 <#
 .SYNOPSIS
-    Numecent Studio - Auto-package.
+    Numecent Studio non-interactive packaging.
 .DESCRIPTION
     Studio can automate the packaging of applications from creation of a project file through
     capture of the installation to the creation of the final appset with the entire process invoked from a single
@@ -58,7 +58,6 @@ $studioPath = "$rootDrive\" + "Program Files\Numecent\Cloudpaging Studio\"
 if(-NOT (Test-Path -Path $studioPath)){
     $studioPath = "C:\Program Files\Numecent\Cloudpaging Studio\"
 }
-
 
 Get-ChildItem -Path "$studioPath\lib" -Filter *.dat | ForEach-Object {
     Set-ItemProperty -Path $_.FullName -Name IsReadOnly -Value $false
@@ -111,7 +110,7 @@ SET SOURCE=%SOURCE:~0,-1%
 
     $batString = $batString.Replace("^INSTALLER_NAME^","$installerName")
 
-    If($json.CaptureCommands.PostInstallActions.Enabled){
+    if($json.CaptureCommands.PostInstallActions.Enabled){
         $customString = $json.CaptureCommands.PostInstallActions.Commands | Out-String
         $batString = $batString + $customString
     }
@@ -218,7 +217,7 @@ function Restore-Dat {
         [string] $datFile
     )
 
-    If (Test-Path -Path $datFile".bak")
+    if(Test-Path -Path $datFile".bak")
     {
         Copy-Item -Path $datFile".bak" -Destination $datFile -Force
         Remove-Item -Path $datFile".bak"
@@ -319,48 +318,44 @@ function Invoke-PreCaptureScript{
 }
 
 # Requires Administrator Rights
-if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+if(-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
     Throw "You do not have Administrator rights to run this script.`nPlease re-run this script as an Administrator."
 }
 
 # Verify Studio is installed and UAC is disabled
-if (-NOT (Test-Path -Path $studioCmd))
+if(-NOT (Test-Path -Path $studioCmd))
 {
     Throw "Cloudpaging Studio was not found to be installed at location: $studioPath"
 }
-if ((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA) {
+if((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA) {
     Throw "Windows user access control (UAC) is enabled on this machine and can interfere with automated packaging."
 }
 
 
 # Verify the parameter
-
-
 $processIni = $true
 switch ($PsCmdlet.ParameterSetName)
 {
     "jsonFile"  {
-                    if (!$config_file_path)
+                    if(!$config_file_path)
                     {
                         Throw 'Missing parameter: $config_file_path'
                     }
 
                     # Verify the JSON file can be found
-                    if (-NOT (Test-Path -Path $config_file_path))
+                    if(-NOT (Test-Path -Path $config_file_path))
                     {
                         Throw "JSON file does not exist: $config_file_path"
                     }
 
                     $studioIni = $config_file_path
-                     $studioLog ="$([io.path]::getdirectoryname($config_file_path))\" + "$([io.path]::GetFileNameWithoutExtension($config_file_path))_NIP.log"
-                    # Read the INI for a project name
+                    $studioLog ="$([io.path]::getdirectoryname($config_file_path))\" + "$([io.path]::GetFileNameWithoutExtension($config_file_path))_NIP.log"
 
+                    # Read the JSON file for project settings
                     $json = Get-Content $config_file_path | ConvertFrom-Json
 
-
                     [double]$version = $json.JsonConfigVersion -as [double]
-
                     if($SUPORTED_JSON.Contains($version))
                     {
                        Write-Output "Reading config file version: $($json.JsonConfigVersion)"
@@ -371,7 +366,8 @@ switch ($PsCmdlet.ParameterSetName)
                         if($min -gt $version)
                         {
                             Write-Output "WARNING: This configuration file is no longer supported, would you like to continue anyways?"
-                        }else
+                        }
+                        else
                         {
                             Write-Output "WARNING: This configuration file request a newer version of NIPS, would you like to continue anyways?"
                         }
@@ -383,98 +379,95 @@ switch ($PsCmdlet.ParameterSetName)
                             }while($key.Key -ne "Enter")
                     }
 
-                    ####set required settings here###
-                    #   '#' = Not currently being communicated to cloudpaging studio
+                    # Set required settings from JSON
+                    if(!$installer_path)
+                    {
+                        $installer_path = $json.CaptureCommands.InstallerPath | Format-String
+                    }
+                    if(!$output_folder)
+                    {
+                        $output_folder = $json.OutputSettings.OutputFolder  | Format-String
+                    }
 
-                        if(!$installer_path)
-                        {
-                            $installer_path = $json.CaptureCommands.InstallerPath | Format-String
-                        }
-                        if(!$output_folder)
-                        {
-                            $output_folder = $json.OutputSettings.OutputFolder  | Format-String
-                        }
-                        #make sure output folder ends in '\'
-                        if(-NOT ($output_folder -match '\\$'))
-                        {
-                            $output_folder =$output_folder + '\'
-                        }
+                    if(-NOT ($output_folder -match '\\$'))
+                    {
+                        # make sure output folder ends in '\'
+                        $output_folder =$output_folder + '\'
+                    }
 
-                        $WorkingFolder = ""
-                        if(!$working_folder)
-                        {
-                            $WorkingFolder = $working_folder
-                        }elseif(!($json.ProjectSettings.WorkingFolder))
-                        {
-                            $WorkingFolder = $json.ProjectSettings.WorkingFolder | Format-String
-                        }
+                    $WorkingFolder = ""
+                    if(!$working_folder)
+                    {
+                        $WorkingFolder = $working_folder
+                    }
+                    elseif(!($json.ProjectSettings.WorkingFolder))
+                    {
+                        $WorkingFolder = $json.ProjectSettings.WorkingFolder | Format-String
+                    }
 
-                        $ProjectDescription = $json.ProjectSettings.ProjectDescription | Format-String
-                        #$ProjectFileName = $json.ProjectSettings.ProjectFileName | Format-String
-                        #$ProjectFolder = $json.ProjectSettings.ProjectFolder | Format-String
-                        $CompressionMethod = $json.OutputSettings.CompressionMethod  | Format-String
-                        $EncryptionMethod = $json.OutputSettings.EncryptionMethod | Format-String
-                        $CommandLine = $json.ProjectSettings.CommandLine  | Format-String
-                        $CommandLineParams = $json.ProjectSettings.CommandLineParams
-                        #$IconFile = $json.ProjectSettings.IconFile  | Format-String
-                        #$EulaFile = $json.ProjectSettings.EulaFile  | Format-String
+                    $ProjectDescription = $json.ProjectSettings.ProjectDescription | Format-String
+                    #$ProjectFileName = $json.ProjectSettings.ProjectFileName | Format-String
+                    #$ProjectFolder = $json.ProjectSettings.ProjectFolder | Format-String
+                    $CompressionMethod = $json.OutputSettings.CompressionMethod  | Format-String
+                    $EncryptionMethod = $json.OutputSettings.EncryptionMethod | Format-String
+                    $CommandLine = $json.ProjectSettings.CommandLine  | Format-String
+                    $CommandLineParams = $json.ProjectSettings.CommandLineParams
+                    #$IconFile = $json.ProjectSettings.IconFile  | Format-String
+                    #$EulaFile = $json.ProjectSettings.EulaFile  | Format-String
 
-                        $CaptureAllProcesses = "Yes"
-                        if(!$json.CaptureSettings.CaptureAllProcesses)
-                        {
-                            $CaptureAllProcesses = "No"
-                        }
-                        #$IgnoreChangesUnderInstallerPath = $json.CaptureSettings.IgnoreChangesUnderInstallerPath
-                        #$ReplaceRegistryShortPaths = $json.CaptureSettings.ReplaceRegistryShortPaths
-                        $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
-                        $DefaultDispositionLayer = $json.VirtualizationSettings.DefaultDispositionLayer
-                        $OutputFileNameNoExt = $json.OutputSettings.OutputFileNameNoExt
-                        if($appset_name){
-                            $OutputFileNameNoExt = $appset_name
-                        }
-                        if($OutputFileNameNoExt -match " "){
-                            $OutputFileNameNoExt = "`"$OutputFileNameNoExt`""
-                        }
+                    $CaptureAllProcesses = "Yes"
+                    if(!$json.CaptureSettings.CaptureAllProcesses)
+                    {
+                        $CaptureAllProcesses = "No"
+                    }
+                    #$IgnoreChangesUnderInstallerPath = $json.CaptureSettings.IgnoreChangesUnderInstallerPath
+                    #$ReplaceRegistryShortPaths = $json.CaptureSettings.ReplaceRegistryShortPaths
+                    $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
+                    $DefaultDispositionLayer = $json.VirtualizationSettings.DefaultDispositionLayer
+                    $OutputFileNameNoExt = $json.OutputSettings.OutputFileNameNoExt
+                    if($appset_name){
+                        $OutputFileNameNoExt = $appset_name
+                    }
+                    if($OutputFileNameNoExt -match " "){
+                        $OutputFileNameNoExt = "`"$OutputFileNameNoExt`""
+                    }
                         
+                    $FinalizeIntoSTP = "Yes"
+                    if(!$json.OutputSettings.FinalizeIntoSTP){
+                        $FinalizeIntoSTP = "No"
+                    }
 
-                        $FinalizeIntoSTP = "Yes"
-                        if(!$json.OutputSettings.FinalizeIntoSTP){
-                            $FinalizeIntoSTP = "No"
+                    # If indicated, create a bat file
+                    if($json.CaptureCommands.Enabled)
+                    {
+                        $installer_path = Initialize-InstallWrapper
+                        Write-Output "Installer path is $installer_path"
+                    }
+                    if($null -ne $json.ModifyAssets.ModifyKeys.PSObject.Properties.name){
+                        if($debug_mode){
+                           Write-Output "Initilizing Registry Data...."
                         }
-
-                        ##if indicated, create a bat file
-
-
-                        if ($json.CaptureCommands.Enabled)
-                        {
-                            $installer_path = Initialize-InstallWrapper
-                            Write-Output "Installer path is $installer_path"
-                        }
-                        if ($null -ne $json.ModifyAssets.ModifyKeys.PSObject.Properties.name){
+                        Initialize-RegData
+                    }
+                    if($null -ne $json.ModifyAssets.AddFiles.PSObject.Properties.name)
+                    {
                             if($debug_mode){
-                                Write-Output "Initilizing Registry Data...."
+                                Write-Output "Initilizing File Data...."
                             }
-                            Initialize-RegData
-                        }
-                        if ($null -ne $json.ModifyAssets.AddFiles.PSObject.Properties.name)
-                        {
-                                if($debug_mode){
-                                    Write-Output "Initilizing File Data...."
-                                }
-                                Initialize-FileData
-                        }
-                        if ($json.PreCaptureCommands)
-                        {
-                                Invoke-PreCaptureScript
-                        }
+                            Initialize-FileData
+                    }
+                    if($json.PreCaptureCommands)
+                    {
+                        Invoke-PreCaptureScript
+                    }
 
                     $ProjectName = $json.ProjectSettings.ProjectName.Replace("`"","")
 
                     # Find DAT file filter updates
-                    if ($json.CaptureSettings.FileExclusions)
+                    if($json.CaptureSettings.FileExclusions)
                     {
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $fileDAT".bak"))
+                        if(-NOT (Test-Path -Path $fileDAT".bak"))
                         {
                             Write-Output "Backing up $fileDAT"
                             Copy-Item -Path $fileDAT -Destination $fileDAT".bak"
@@ -500,9 +493,8 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $fileDAT
                     }
-
                     # Find DAT registry filter updates
-                    if ($json.CaptureSettings.RegistryExclusions)
+                    if($json.CaptureSettings.RegistryExclusions)
                     {
 
                         #Surroud the values in quotes when they contain spaces
@@ -542,14 +534,13 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $regDAT
                     }
-
                     # Find DAT process exclusion filter updates
-                    if ($json.CaptureSettings.ProcessExclusions)
+                    if($json.CaptureSettings.ProcessExclusions)
                     {
                         #Surroud the values in quotes when they contain spaces
 
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $procexDAT".bak"))
+                        if(-NOT (Test-Path -Path $procexDAT".bak"))
                         {
                             Write-Output "Backing up $procexDAT"
                             Copy-Item -Path $procexDAT -Destination $procexDAT".bak"
@@ -575,12 +566,11 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $procexDAT
                     }
-                    
                     # Check if system installation processes should be captured (by default, will capture these processes)
                     if (-NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
                     {
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $procfiltDAT".bak"))
+                        if(-NOT (Test-Path -Path $procfiltDAT".bak"))
                         {
                             Write-Output "Backing up $procfiltDAT"
                             Copy-Item -Path $procfiltDAT -Destination $procfiltDAT".bak"
@@ -595,18 +585,17 @@ switch ($PsCmdlet.ParameterSetName)
                          default { break }
                          }
                          # Append the dummy process string to the file
-                        ) + "`n`n# Dummy process inserted here", "`n EMPTY_PROCESS.EXE"
+                        ) + "`n`n# Dummy process inserted here", "`n EMPTY_FAKE_PROCESS.EXE"
                        )
                     }
-
                     # Find DAT process filter updates
-                    if ($json.CaptureSettings.ProcessInclusions.Include)
+                    if($json.CaptureSettings.ProcessInclusions.Include)
                     {
 
                         #Surroud the values in quotes when they contain spaces
 
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $procfiltDAT".bak"))
+                        if(-NOT (Test-Path -Path $procfiltDAT".bak"))
                         {
                             Write-Output "Backing up $procfiltDAT"
                             Copy-Item -Path $procfiltDAT -Destination $procfiltDAT".bak"
@@ -637,11 +626,11 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $procfiltDAT
                     }
-                                                            # Find DAT process filter updates
-                    if ($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -Or $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
+                    # Find DAT process filter updates
+                    if($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -Or $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
                     {
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $defprocsDAT".bak"))
+                        if(-NOT (Test-Path -Path $defprocsDAT".bak"))
                         {
                             Write-Output "Backing up $defprocsDAT"
                             Copy-Item -Path $defprocsDAT -Destination $defprocsDAT".bak"
@@ -658,7 +647,6 @@ switch ($PsCmdlet.ParameterSetName)
                                     ($file_text) | ForEach-Object {$_ -replace $wordSearch, "# $wordSearch"} |  Set-Content $defprocsDAT
                             }
                         }
-
 
                         # Append DAT files
                         Add-Content $defprocsDAT "`r`n`n# -------------------------"
@@ -682,10 +670,10 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $defprocsDAT
                     }
-                    if ($json.VirtualizationSettings.SandboxFileExclusions)
+                    if($json.VirtualizationSettings.SandboxFileExclusions)
                     {
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $fileexcDAT".bak"))
+                        if(-NOT (Test-Path -Path $fileexcDAT".bak"))
                         {
                             Write-Output "Backing up $fileexcDAT"
                             Copy-Item -Path $fileexcDAT -Destination $fileexcDAT".bak"
@@ -698,10 +686,10 @@ switch ($PsCmdlet.ParameterSetName)
                         $OutputString = $json.VirtualizationSettings.SandboxFileExclusions | Out-String
                         $OutputString | Out-String | Add-Content $fileexcDAT
                     }
-                    if ($json.VirtualizationSettings.SandboxRegistryExclusions)
+                    if($json.VirtualizationSettings.SandboxRegistryExclusions)
                     {
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $regexDAT".bak"))
+                        if(-NOT (Test-Path -Path $regexDAT".bak"))
                         {
                             Write-Output "Backing up $regexDAT"
                             Copy-Item -Path $regexDAT -Destination $regexDAT".bak"
@@ -717,25 +705,25 @@ switch ($PsCmdlet.ParameterSetName)
                     break
                 }
     "inputVal" {
-                    if (!$ProjectName)
+                    if(!$ProjectName)
                     {
                         Throw 'Missing parameter: $ProjectName'
                     }
-                    if (!$output_folder)
+                    if(!$output_folder)
                     {
                         Throw 'Missing parameter: $output_folder'
                     }
-                    if (!$installer_path)
+                    if(!$installer_path)
                     {
                         Throw 'Missing parameter: $installer_path'
                     }
                     # Verify the installer can be found
-                    if (-NOT (Test-Path -Path $installer_path))
+                    if(-NOT (Test-Path -Path $installer_path))
                     {
                         Throw "Installer file does not exist: $installer_path"
                     }
                     # Verify the output path exists
-                    if (-NOT (Test-Path -Path $output_folder))
+                    if(-NOT (Test-Path -Path $output_folder))
                     {
                         Throw "Output path does not exist: $output_folder"
                     }
@@ -775,7 +763,7 @@ FinalizeIntoSTP=$FinalizeIntoSTP
 "@
 
 # Execute the Cloudpaging-prep script, if present
-if (Test-Path -Path $studioPrep)
+if(Test-Path -Path $studioPrep)
 {
 #    & "$studioPrep" true
 }
@@ -783,14 +771,16 @@ if (Test-Path -Path $studioPrep)
 Write-Output "Starting to package $ProjectName automatically..."
 
 # Create the input INI packaging file
-if ($processIni)
+if($processIni)
 {
     $i = Split-Path $installer_path -Leaf
     $studioIni = $installer_path.Replace($i,"studio_config.ini")
     $script:createdFiles += $studioIni
     Write-Output "Creating non-interactive packaging INI as $studioIni"
     New-Item $studioIni -type file -force -value $functionText | Out-Null
-} else {
+} 
+else 
+{
     Write-Output "Input file is $studioIni"
 }
 Write-Output "Output log file is $studioLog "
@@ -813,9 +803,9 @@ if(-NOT ($debug_mode))
     Restore-Dat($fileexcDAT)
 }
 # Check if packaging was successful
-if ($process.ExitCode -eq 0)
+if($process.ExitCode -eq 0)
 {
-    if ($processIni)
+    if($processIni)
     {
         $ProjectName = $ProjectName.Replace("`"","") #Ensure there are no extra quotes
         $appset = $output_folder + $ProjectName + ".stp"
@@ -832,7 +822,7 @@ if ($process.ExitCode -eq 0)
         $appset = $appsetPath + $appset
     }
     # Verify output file exists
-    if (-NOT (Test-Path -Path $appset))
+    if(-NOT (Test-Path -Path $appset))
     {
         Write-Warning "Application package was not found: $appset"
         return
