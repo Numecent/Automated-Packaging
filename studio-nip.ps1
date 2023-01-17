@@ -1,6 +1,6 @@
 #   Cloudpaging Studio - Automated NIP (Non-interactive Packaging)
 #
-#   Copyright (c) 2022 Numecent, Inc.  All rights reserved.
+#   Copyright (c) 2023 Numecent, Inc.  All rights reserved.
 #
 #   This file is an unpublished work and the proprietary and confidential
 #   information of Numecent.  Should this source code become published,
@@ -10,7 +10,7 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision December 19, 2022
+# Revision January 17, 2023
 
 <#
 .SYNOPSIS
@@ -231,7 +231,7 @@ function Initialize-RegData{
     $regFileCt = 0
     #ModifyKeys
     foreach($entry in $json.ModifyAssets.ModifyKeys.PSObject.Properties.name){
-        if($null -eq $json.ModifyAssets.AddFiles.PSObject.Properties.name){
+        if($null -eq $json.ModifyAssets.ModifyKeys.PSObject.Properties.name){
             break
         }
 
