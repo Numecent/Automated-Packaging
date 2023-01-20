@@ -10,7 +10,7 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision January 17, 2023
+# Revision January 20, 2023
 
 <#
 .SYNOPSIS
@@ -131,9 +131,15 @@ function Get-ServiceString {
     #Read lines until * is reached
 
     $path = (get-item $StpFile).Directory.Parent.FullName
-    $result = Get-ChildItem -Path $path -Recurse -Filter "*MERGE_RESULTS*"
-    $mergeLogPath = $output_folder + "/$result"
+    $mergeName = Split-Path $stpFile -Leaf
+    $mergeName = $mergeName.Replace(".stp","*MERGE_RESULTS*")
+    $result = Get-ChildItem -Path $path -Recurse -Filter "$mergeName"
 
+    if ($result.count -gt 1){
+        #Get latest result with matching name
+        $result = Get-ChildItem -Path $path -Recurse -Filter "$mergeName" | Sort-Object LastAccessTime -Descending | Select-Object -First 1
+    }
+    $mergeLogPath = $output_folder + "/$result"
     $linect = 0
     $servicesString = ""
 
@@ -147,11 +153,9 @@ function Get-ServiceString {
             break #once next header is encountered end loop
         }
         $servicesString += "$line`n"
-
     }
 
     return $servicesString
-
 }
 
 function Get-RevNote{
