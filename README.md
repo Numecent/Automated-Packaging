@@ -1,12 +1,12 @@
 # Cloudpaging Automated-Packaging
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
-As this is a preview Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
+Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
 
 ## Overview
 Cloudpaging is a foundational technology framework and represents Numecent's vision to transform native software delivery, deployment and provisioning from the Cloud, both public and private, and on-premises. This patented technology makes it possible to lift and shift existing client applications to a new operating environment without all the hassle and expense of upgrading to new versions of your existing software.
 
-The Cloudpaging Studio is where the science begins in the form of application packaging. The Studio prepares the application for automated deployment, updates, and access settings based upon the predetermined permission levels within your organization. You can package your apps for Windows 7 and easily lift and shift them over to Windows 10. 
+The Cloudpaging Studio is where the science begins in the form of application packaging. The Studio prepares the application for automated deployment, updates, and access settings based upon the predetermined permission levels within your organization. You can package your apps for Windows XP or 7 and easily lift and shift them over to Windows 10. 
 
 For more information, please visit [www.numecent.com](https://www.numecent.com/).
 
@@ -44,7 +44,7 @@ Now, by using JSON config instruction files and Powershell, you can easily creat
 
 ### JSON Config Instruction Setup
 
-The file `Example_JSON_1.0.json` details the basic format of the JSON config instruction file.
+The file `Example_JSON_1.2.json` details the basic format of the JSON config instruction file.
 
 Refer to the uploaded JSON config instruction files for more examples.
 
@@ -53,13 +53,13 @@ The following is an example with comments:
 **Project Settings**
 ```
     "ProjectSettings": {
-        "ProjectName": "Evernote_6-21-2-8717_32bit_x64_NLR_English_Rel1",
-        "ProjectDescription": "Evernote is an app designed for note taking and organizing task management.",
-        "IconFile": "C:\\Program Files (x86)\\Evernote\\Evernote\\Evernote.exe",
+        "ProjectName": "7-Zip_19-0_64bit_x64_NLR_English_Rel1",
+        "ProjectDescription": "7-Zip is a free and open-source file archiver utility used to place groups of files within compressed containers known as archives.",
+        "IconFile": "C:\\Program Files\\7-Zip\\7zFM.exe",
         "ProjectFileName": "",
-        "WorkingFolder": "C:\\Program Files (x86)\\Evernote\\Evernote\\",
-        "ProjectFolder": "C:\\NIP_software\\Evernote\\Output",
-        "CommandLine": "C:\\Program Files (x86)\\Evernote\\Evernote\\Evernote.exe",
+        "WorkingFolder": "C:\\Program Files\\7-Zip\\",
+        "ProjectFolder": "",
+        "CommandLine": "C:\\Program Files\\7-Zip\\7zFM.exe",
         "CommandLineParams": "",
         "TargetOS": [
             "Win7-x64",
@@ -203,11 +203,25 @@ Key modifications included in `ModifyKeys` will also be included in the capture.
     "VirtualizationSettings": {
         "DefaultDispositionLayer": 3,
         "DefaultServiceVirtualizationAction": "Register",
+		"FileDispositionLayers":{
+            "Fonts": {
+                "Path": "C:\\Windows\\Fonts",
+                "Layer": 1,
+                "Recurse": true
+            }
+        },
+        "RegistryDispositionLayers":{
+            "AntiMalware":{
+                "Location": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft Antimalware",
+                "Layer": 3,
+                "Recurse": false
+            }
+        },
         "SandboxFileExclusions": [],
         "SandboxRegistryExclusions": []
     },
 ```
-After the capture is complete, Cloudpaging Studio will use these settings in the virtualization process.
+After the capture is complete, Cloudpaging Studio will use these settings in the virtualization process. The `DefaultDispositionLayer` will be used for all files and registry keys. For changes on specific files or registry keys, the `FileDispositionLayers` or `RegistryDispositionLayers` can be used to set the desired layer. If a new file or registry key created by the application should be outside of the sandbox and directly to the system, then the `SandboxFileExclusions` and `SandboxRegistryExclusions` can be set.
 
 **SecurityOverrideSettings**
 ```
@@ -270,5 +284,5 @@ Please upload only the JSON configuration files to the appropriate application f
 
 JSON files should be uploaded in the form:
 
-`/Automated-Packaging/MyApplication/MyApplication_Packaging_Config_File.json`
+`/Automated-Packaging/Samples/MyApplication/MyApplication_Packaging_Config_File.json`
 

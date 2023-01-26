@@ -10,7 +10,7 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision January 20, 2023
+# Revision January 26, 2023
 
 <#
 .SYNOPSIS
@@ -47,11 +47,12 @@ param (
     [Parameter(ParameterSetName="jsonFile", Position=5)][string]$debug_mode=$null
 )
 
-$NIPS_VERSION = 1.0         #Version number for nips, this will be stored in revnotes
-$SUPORTED_JSON = 1.0, 1.1   #Add supported version in array
+$NIPS_VERSION = 1.0              #Version number for nips, this will be stored in revnotes
+$SUPORTED_JSON = 1.0, 1.1, 1.2   #Add supported version in array
 
 $studioIni = $null
-$script:createdFiles = @()
+$script:createdFiles = @()          #List of files created in automated packaging
+$script:versionNumber = $null       #Cloudpaging Studio Version
 
 $rootDrive = Split-Path -Path $config_file_path -Qualifier
 $studioPath = "$rootDrive\" + "Program Files\Numecent\Cloudpaging Studio\"
@@ -63,15 +64,18 @@ Get-ChildItem -Path "$studioPath\lib" -Filter *.dat | ForEach-Object {
     Set-ItemProperty -Path $_.FullName -Name IsReadOnly -Value $false
 }
 
-$studioCmd = $studioPath+"JukeboxStudio.exe"
-$studioPrep = $studioPath+"CloudpagingStudio-prep.ps1"
-$fileDAT = $studioPath+"lib\filefilt.dat"
-$regDAT = $studioPath+"lib\regfilt.dat"
-$procexDAT = $studioPath + "lib\procexcluded.dat"
-$procfiltDAT = $studioPath + "lib\procfilt.dat"
-$defprocsDAT = $studioPath + "lib\defprocsel.dat"
-$fileexcDAT = $studioPath + "lib\fileexcluded.dat"
-$regexDAT = $studioPath + "lib\regexcluded.dat"
+$studioCmd = $studioPath + "JukeboxStudio.exe"              #Execute Automated Packaging
+$studioPrep = $studioPath + "CloudpagingStudio-prep.ps1"    #Store downloaded prep scripts here
+
+$fileDAT = $studioPath + "lib\filefilt.dat"                 # File Exclusions         ($json.CaptureSettings.FileExclusion)
+$regDAT = $studioPath + "lib\regfilt.dat"                   # Registry Exclusions     ($json.CaptureSettings.RegistryExclusions)
+$procexDAT = $studioPath + "lib\procexcluded.dat"           # Process Exclusions      ($json.CaptureSettings.ProcessExclusions)
+$procfiltDAT = $studioPath + "lib\procfilt.dat"             # Process Inclusion       ($json.CaptureSettings.ProcessInclusions.Include)
+$defprocsDAT = $studioPath + "lib\defprocsel.dat"           # Security Override       ($json.SecurityOverrideSettings)
+$fileexcDAT = $studioPath + "lib\fileexcluded.dat"          # Sandbox File Exclusions ($json.VirtualizationSettings.SandboxFileExclusions)
+$regexDAT = $studioPath + "lib\regexcluded.dat"             # Sandbox Reg Exclusions  ($json.VirtualizationSettings.SandboxRegistryExclusions)
+$regDispoDAT = $studioPath + "lib\regdispositions.dat"      # Registry Dispo Layers   ($json.VirtualizationSettings.RegistryDispositionLayers)
+$fileDispoDAT = $studioPath + "lib\filedispositions.dat"    # File Dispo Layers       ($json.VirtualizationSettings.FileDispositionLayers)
 
 $json = $null
 $WorkingFolder = "C:\"
@@ -183,6 +187,7 @@ function Get-RevNote{
 
 NIPS_Version = $NIPS_VERSION
 JSON_Version = $($json.JsonConfigVersion)
+Studio_Version = $script:versionNumber
 Date_Packaged = $date
 Platform_Packaged_On = $osString
 File_Name = $fileName
@@ -214,7 +219,18 @@ $services
     Rename-Item -Path $zipFile -NewName $stpName
     Remove-Item -Path $NotePath
 }
+function Backup-Dat {
+    #Create a .bak backup file of the dat
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string] $datFile
+    )
 
+    if (-NOT (Test-Path -Path $datFile".bak")) {
+        Write-Output "Backing up $datFile"
+        Copy-Item -Path $datFile -Destination $datFile".bak"
+    }
+}
 function Restore-Dat {
     param (
         [Parameter(Mandatory=$true, Position=0)]
@@ -336,6 +352,8 @@ if((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Sy
     Throw "Windows user access control (UAC) is enabled on this machine and can interfere with automated packaging."
 }
 
+$script:versionNumber = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("$studioCmd").FileVersion
+Write-Output "Cloudpaging Studio Version: $script:versionNumber"
 
 # Verify the parameter
 $processIni = $true
@@ -390,7 +408,7 @@ switch ($PsCmdlet.ParameterSetName)
                     }
                     if(!$output_folder)
                     {
-                        $output_folder = $json.OutputSettings.OutputFolder  | Format-String
+                        $output_folder = $json.OutputSettings.OutputFolder | Format-String
                     }
 
                     if(-NOT ($output_folder -match '\\$'))
@@ -410,22 +428,31 @@ switch ($PsCmdlet.ParameterSetName)
                     }
 
                     $ProjectDescription = $json.ProjectSettings.ProjectDescription | Format-String
-                    #$ProjectFileName = $json.ProjectSettings.ProjectFileName | Format-String
-                    #$ProjectFolder = $json.ProjectSettings.ProjectFolder | Format-String
-                    $CompressionMethod = $json.OutputSettings.CompressionMethod  | Format-String
+                    $CompressionMethod = $json.OutputSettings.CompressionMethod | Format-String
                     $EncryptionMethod = $json.OutputSettings.EncryptionMethod | Format-String
-                    $CommandLine = $json.ProjectSettings.CommandLine  | Format-String
+                    $CommandLine = $json.ProjectSettings.CommandLine | Format-String
                     $CommandLineParams = $json.ProjectSettings.CommandLineParams
-                    #$IconFile = $json.ProjectSettings.IconFile  | Format-String
-                    #$EulaFile = $json.ProjectSettings.EulaFile  | Format-String
+                    $IconFile = $json.ProjectSettings.IconFile | Format-String
+                    if(-NOT ([string]::IsNullOrEmpty($IconFile)))
+                    {
+                        $IconFile = """$IconFile"""
+                    }					
 
                     $CaptureAllProcesses = "Yes"
                     if(!$json.CaptureSettings.CaptureAllProcesses)
                     {
                         $CaptureAllProcesses = "No"
                     }
-                    #$IgnoreChangesUnderInstallerPath = $json.CaptureSettings.IgnoreChangesUnderInstallerPath
-                    #$ReplaceRegistryShortPaths = $json.CaptureSettings.ReplaceRegistryShortPaths
+                    $IgnoreChangesUnderInstallerPath = "Yes"
+                    if(!$json.CaptureSettings.IgnoreChangesUnderInstallerPath)
+                    {       
+                        $IgnoreChangesUnderInstallerPath = "No"
+                    }
+                    $ReplaceRegistryShortPaths ="Yes"
+                    if(!$json.CaptureSettings.ReplaceRegistryShortPaths)
+                    {       
+                        $ReplaceRegistryShortPaths = "No"
+                    }
                     $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
                     $DefaultDispositionLayer = $json.VirtualizationSettings.DefaultDispositionLayer
                     $OutputFileNameNoExt = $json.OutputSettings.OutputFileNameNoExt
@@ -435,7 +462,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if($OutputFileNameNoExt -match " "){
                         $OutputFileNameNoExt = "`"$OutputFileNameNoExt`""
                     }
-                        
+
                     $FinalizeIntoSTP = "Yes"
                     if(!$json.OutputSettings.FinalizeIntoSTP){
                         $FinalizeIntoSTP = "No"
@@ -471,12 +498,8 @@ switch ($PsCmdlet.ParameterSetName)
                     if($json.CaptureSettings.FileExclusions)
                     {
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $fileDAT".bak"))
-                        {
-                            Write-Output "Backing up $fileDAT"
-                            Copy-Item -Path $fileDAT -Destination $fileDAT".bak"
-                        }
-
+                        Backup-Dat $fileDAT
+			
                         # Append DAT files
                         Add-Content $fileDAT "`r`n`n# -------------------------"
                         Add-Content $fileDAT "FILTER_ACTION EXCLUDE"
@@ -504,11 +527,7 @@ switch ($PsCmdlet.ParameterSetName)
                         #Surroud the values in quotes when they contain spaces
 
                         # Back the DAT file
-                        if (-NOT (Test-Path -Path $regDAT".bak"))
-                        {
-                            Write-Output "Backing up $regDAT"
-                            Copy-Item -Path $regDAT -Destination $regDAT".bak"
-                        }
+                        Backup-Dat $regDAT
 
                         # Append DAT files
                         Add-Content $regDAT "`r`n`n# -------------------------"
@@ -544,11 +563,7 @@ switch ($PsCmdlet.ParameterSetName)
                         #Surroud the values in quotes when they contain spaces
 
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $procexDAT".bak"))
-                        {
-                            Write-Output "Backing up $procexDAT"
-                            Copy-Item -Path $procexDAT -Destination $procexDAT".bak"
-                        }
+                        Backup-Dat $procexDAT
 
                         # Append DAT files
                         Add-Content $procexDAT "`r`n`n# -------------------------"
@@ -601,12 +616,8 @@ switch ($PsCmdlet.ParameterSetName)
                         #Surroud the values in quotes when they contain spaces
 
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $procfiltDAT".bak"))
-                        {
-                            Write-Output "Backing up $procfiltDAT"
-                            Copy-Item -Path $procfiltDAT -Destination $procfiltDAT".bak"
-                        }
-
+                        Backup-Dat $procfiltDAT
+			
                         # Append DAT files
                         Add-Content $procfiltDAT "`n# Filters for $ProjectName"
                         #Create Output String and format for writing to DAT file
@@ -636,11 +647,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -Or $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
                     {
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $defprocsDAT".bak"))
-                        {
-                            Write-Output "Backing up $defprocsDAT"
-                            Copy-Item -Path $defprocsDAT -Destination $defprocsDAT".bak"
-                        }
+                        Backup-Dat $defprocsDAT
 
                         #Check if DAT entry needs update
                         $file_text = Get-Content $defprocsDAT
@@ -679,11 +686,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if($json.VirtualizationSettings.SandboxFileExclusions)
                     {
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $fileexcDAT".bak"))
-                        {
-                            Write-Output "Backing up $fileexcDAT"
-                            Copy-Item -Path $fileexcDAT -Destination $fileexcDAT".bak"
-                        }
+                        Backup-Dat $fileexcDAT
 
                         # Append DAT files
                         Add-Content $fileexcDAT "`r`n`n# -------------------------"
@@ -695,11 +698,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if($json.VirtualizationSettings.SandboxRegistryExclusions)
                     {
                         # Back the DAT file
-                        if(-NOT (Test-Path -Path $regexDAT".bak"))
-                        {
-                            Write-Output "Backing up $regexDAT"
-                            Copy-Item -Path $regexDAT -Destination $regexDAT".bak"
-                        }
+                        Backup-Dat $regexDAT
 
                         # Append DAT files
                         Add-Content $regexDAT "`r`n`n# -------------------------"
@@ -707,6 +706,39 @@ switch ($PsCmdlet.ParameterSetName)
                         #Create Output String and format for writing to DAT file
                         $OutputString = $json.VirtualizationSettings.SandboxRegistryExclusions | Out-String
                         $OutputString | Out-String | Add-Content $regexDAT
+                    }
+                    if ($json.VirtualizationSettings.FileDispositionLayers -AND ($script:versionNumber -ge 9.2)) {
+                        # Back the DAT file
+                        Backup-Dat $fileDispoDAT
+			
+                        $OutputString = "`n"
+                        $json.VirtualizationSettings.FileDispositionLayers.PSObject.Properties | ForEach-Object {
+                            $path = $_.PSObject.Properties.Value.Path
+                            if ($path -match " ") {
+                                $path = "`"$path`""
+                                $path = $path.Replace("\", "\\")
+                            }
+                            $OutputString += "$path`t`t $($_.PSObject.Properties.Value.Layer)`t`t $($_.PSObject.Properties.Value.Recurse)`n"
+                        }
+                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE")
+                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE")
+                        $OutputString | Out-String | Add-Content $fileDispoDAT
+                    }
+                    if ($json.VirtualizationSettings.RegistryDispositionLayers -AND ($script:versionNumber -ge 9.2)) {
+                        # Back the DAT file
+                        Backup-Dat $regDispoDAT
+                        $OutputString = "`n"
+                        $json.VirtualizationSettings.RegistryDispositionLayers.PSObject.Properties | ForEach-Object {
+                            $location = $_.PSObject.Properties.Value.Location
+                            if ($location -match " ") {
+                                $location = "`"$location`""
+                                $location = $location.Replace("\", "\\")
+                            }
+                            $OutputString += "$location`t`t $($_.PSObject.Properties.Value.Layer)`t`t $($_.PSObject.Properties.Value.Recurse)`n"
+                        }
+                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE")
+                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE")
+                        $OutputString | Out-String | Add-Content $regDispoDAT
                     }
                     break
                 }
@@ -753,12 +785,15 @@ CompressionMethod=$CompressionMethod
 EncryptionMethod=$EncryptionMethod
 CommandLine="$CommandLine"
 WorkingFolder="$WorkingFolder"
+IconFile=$IconFile
 
 [CaptureSettings]
 InstallerPath="$installer_path"
 CommandLineParams="$CommandLineParams"
 CaptureAllProcesses=$CaptureAllProcesses
 CaptureTimeout=$CaptureTimeout
+IgnoreChangesUnderInstallerPath=$IgnoreChangesUnderInstallerPath
+ReplaceRegistryShortPaths=$ReplaceRegistryShortPaths
 DefaultDispositionLayer=$DefaultDispositionLayer
 DefaultServiceVirtualizationAction=$DefaultServiceVirtualizationAction
 
@@ -807,6 +842,8 @@ if(-NOT ($debug_mode))
     Restore-Dat($procexDAT)
     Restore-Dat($procfiltDAT)
     Restore-Dat($fileexcDAT)
+    Restore-Dat($fileDispoDAT)
+    Restore-Dat($regDispoDAT)
 }
 # Check if packaging was successful
 if($process.ExitCode -eq 0)
@@ -845,6 +882,7 @@ if($process.ExitCode -eq 0)
 
         if(-NOT ($debug_mode)){
             foreach($file in $script:createdFiles){
+                #Remove uneccessary files created during packaging
                 Remove-Item -Path $file
             }
         }
