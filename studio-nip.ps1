@@ -720,8 +720,8 @@ switch ($PsCmdlet.ParameterSetName)
                             }
                             $OutputString += "$path`t`t $($_.PSObject.Properties.Value.Layer)`t`t $($_.PSObject.Properties.Value.Recurse)`n"
                         }
-                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE")
-                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE")
+                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE"
+                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE"
                         $OutputString | Out-String | Add-Content $fileDispoDAT
                     }
                     if ($json.VirtualizationSettings.RegistryDispositionLayers -AND ($script:versionNumber -ge 9.2)) {
@@ -736,8 +736,8 @@ switch ($PsCmdlet.ParameterSetName)
                             }
                             $OutputString += "$location`t`t $($_.PSObject.Properties.Value.Layer)`t`t $($_.PSObject.Properties.Value.Recurse)`n"
                         }
-                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE")
-                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE")
+                        $OutputString = $OutputString -ireplace [regex]::Escape("True"), "TRUE"
+                        $OutputString = $OutputString -ireplace [regex]::Escape("False"), "FALSE"
                         $OutputString | Out-String | Add-Content $regDispoDAT
                     }
                     break
