@@ -304,7 +304,10 @@ function Initialize-FileData{
 
         $content | Out-File -FilePath $tempDestination -Encoding ascii
         $script:createdFiles += $tempDestination
-
+	$filedataDestinationTest = Test-path $destination 
+	if ($filedataDestinationTest -eq $false){
+	New-item $destination -ItemType directory > $null -Force
+	}
         Add-Content $installer_path "COPY `"$tempDestination`" `"$destination`" `n"
     }
 
