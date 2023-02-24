@@ -203,7 +203,7 @@ Key modifications included in `ModifyKeys` will also be included in the capture.
     "VirtualizationSettings": {
         "DefaultDispositionLayer": 3,
         "DefaultServiceVirtualizationAction": "Register",
-		"FileDispositionLayers":{
+	"FileDispositionLayers":{
             "Fonts": {
                 "Path": "C:\\Windows\\Fonts",
                 "Layer": 1,
