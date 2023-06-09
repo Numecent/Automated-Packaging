@@ -1,7 +1,7 @@
 # Cloudpaging Automated-Packaging
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
-Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
+Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here]([https://numecent.freshdesk.com/support/discussions/forums/1000229144](https://github.com/Numecent/Automated-Packaging/discussions/).
 
 ## Overview
 Cloudpaging is a foundational technology framework and represents Numecent's vision to transform native software delivery, deployment and provisioning from the Cloud, both public and private, and on-premises. This patented technology makes it possible to lift and shift existing client applications to a new operating environment without all the hassle and expense of upgrading to new versions of your existing software.
