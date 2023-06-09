@@ -20,7 +20,7 @@ This PS1 script helps generating the automated packaging JSON file and starting 
 
 ##Install Instructions  
 
-Download contents of Powershell-Generator to C:\NIP_Software 
+Download contents of NIP_Software to C:\NIP_Software 
 
 Recommended: Download and utilize Studio Capture Filter Definition  
 
