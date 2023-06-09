@@ -53,7 +53,7 @@ Files (https://numecent.freshdesk.com/support/solutions/articles/1000264620-stud
 ## PS CustomObjects Examples  
 
 * File Addition  
-
+```
 $Fileaddition =@()
 $Fileaddition += [PSCustomObject]@{
 FileName = "master_preferences"
@@ -69,8 +69,9 @@ FileContent = @"
 }
 "@
 }
-
+```
 * Registry modify
+```
 $Registrymodify =@()
 $Registrymodify += [PSCustomObject]@{
 Location = "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Update"
@@ -79,24 +80,27 @@ values = "UpdateDefault=dword:00000000",
 "AutoUpdateCheckPeriodMinutes=dword:00000000"
 
 }
+```
 
 * Custom Registry Disposition 
-
+```
 $CustomRegistryDisposition =@()
 $CustomRegistryDisposition += [PSCustomObject]@{
 Location = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup"
 Layer = 4
 Recurse = "true"
 }
+```
 
 * Custom File Disposition  
-
+```
 $CustomfileDisposition =@()
 $CustomfileDisposition += [PSCustomObject]@{
 Path = "C:\Program Files\Google\Chrome\Application\SetupMetrics"
 Layer = 4
 Recurse 
 }
+```
 
 ## Scripts with Examples  
 
@@ -107,13 +111,13 @@ The script below captures Chrome, with Zoom on top (as a CustomCommandine) along
 The second example is to capture Acrobat with an MST (using Arguments).  
 
 • 	Example #1:  
-
+```
 & C:\NIP_software\Auto-Generate-and-Create-Package.ps1 -FilePath C:\NIP_software\googlechromestandaloneenterprise64.msi -CustomCommandlines 'msiexec.exe /i "C:\NIP_software\Zoom\installer_cfg\ZoomInstallerVDI.msi"', 'reg add  "HKLM\SOFTWARE\Policies\Zoom\Zoom Meetings\VDI" /v EnableShareAudioSound /t  REG_DWORD /d 1 /f', 'reg add "HKLM\SOFTWARE\Policies\Zoom\Zoom Meetings\VDI" /v Fallbackmode /t REG_DWORD /d 6 /f', 'reg add "HKLM\SOFTWARE\Policies\Zoom\Zoom Meetings\VDI" /v LogLevel /t REG_DWORD /d 4 /f'
-
+```
 • 	Example #2:  
-
+```
 & C:\NIP_software\Auto-Generate-and-Create-Package.ps1 -FilePath 'C:\NIP_Software\Acro Pro.msi' -Arguments 'TRANSFORMS="C:\NIP_Software\Acro Pro.mst"'  
-
+```
 ## Additional Options: (defaults in bold) 
 
 -**Compression** – Set compression type to use ('**LZMA**', 'NONE') 
