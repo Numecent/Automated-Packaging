@@ -1,10 +1,10 @@
 # Cloudpaging Automated-Packaging
 This is a repository of JSON configuration files to showcase automated packaging with Cloudpaging technology.
 
-Numecent does not offer professional support services for automated packaging at this time. All support efforts are community driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
+Numecent does not offer professional support services for automated packaging at this time. All support efforts are community-driven. Please visit our [community discussion forum here](https://numecent.freshdesk.com/support/discussions/forums/1000229144).
 
 ## Overview
-Cloudpaging is a foundational technology framework and represents Numecent's vision to transform native software delivery, deployment and provisioning from the Cloud, both public and private, and on-premises. This patented technology makes it possible to lift and shift existing client applications to a new operating environment without all the hassle and expense of upgrading to new versions of your existing software.
+Cloudpaging is a foundational technology framework and represents Numecent's vision to transform native software delivery, deployment and provisioning from the Cloud, both public and private, and on-premises. This patented technology makes it possible to lift and shift existing client applications to a new operating environment, without all the hassle and expense of upgrading to new versions of your existing software.
 
 The Cloudpaging Studio is where the science begins in the form of application packaging. The Studio prepares the application for automated deployment, updates, and access settings based upon the predetermined permission levels within your organization. You can package your apps for Windows XP or 7 and easily lift and shift them over to Windows 10. 
 
@@ -20,9 +20,9 @@ This PS1 script helps generating the automated packaging JSON file and starting 
 
 ##Install Instructions  
 
-Download contents of NIP_Software to C:\NIP_Software 
+Download the contents of NIP_Software to C:\NIP_Software 
 
-Recommended: Download and utilize Studio Capture Filter Definition  
+Recommended: Download and utilize Studio Capture Filter Definition.
 
 Files (https://numecent.freshdesk.com/support/solutions/articles/1000264620-studio-capture-filterhttps://numecent.freshdesk.com/support/solutions/articles/1000264620-studio-capture-filter-definition-filesdefinition-files)  
 
@@ -94,7 +94,7 @@ Recurse = "true"
 
 * Custom File Disposition  
 ```
-$CustomfileDisposition =@()
+$CustomFileDisposition =@()
 $CustomfileDisposition += [PSCustomObject]@{
 Path = "C:\Program Files\Google\Chrome\Application\SetupMetrics"
 Layer = 4
@@ -108,7 +108,7 @@ Recurse
 
 The script below captures Chrome, with Zoom on top (as a CustomCommandine) along with parameters. It also adds registry keys (via RegistryModify), sets a registry disposition (via CustomRegistryDisposition), sets a file disposition to a folder (via CustomFileDisposition), and creates a custom file (via FileAddition).   
 
-The second example is to capture Acrobat with an MST (using Arguments).  
+The second example is capturing Acrobat with an MST (using Arguments).  
 
 • 	Example #1:  
 ```
@@ -146,7 +146,7 @@ The second example is to capture Acrobat with an MST (using Arguments).
 
 -**Prerequisites** – Set whether prerequisites to capturing the package need to occur ($True,**$False**) 
 
--**PrerequisiteCommands** – Set prerequitsiite commands to run e.g “cmd.exe /c copy C:\temp\tempfile1.config c:\appdirectory\” 
+-**PrerequisiteCommands** – Set prerequisite commands to run e.g “cmd.exe /c copy C:\temp\tempfile1.config c:\appdirectory\” 
 
 -**DefaultServiceVirtualizationAction** – Set what the default service vitulization action is ('**None**', 'Register', 'Start')] 
 
