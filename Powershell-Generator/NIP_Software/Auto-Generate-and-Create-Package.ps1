@@ -15,8 +15,7 @@
 
 
 Param(
-    [Parameter(Mandatory = $false)]
-    [ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
+    [Parameter(Mandatory = $false)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
     [string]$FilePath,
     [Parameter(Mandatory = $false)]
     [string]$Description,
@@ -34,6 +33,8 @@ Param(
     [string]$Encryption = 'AES-256-Enhanced',
     [Parameter(Mandatory = $false)][ValidateSet('3', '4')]
     [string]$DefaultDispositionLayer = 3,
+    [Parameter(Mandatory = $false)][ValidateRange(1, [int]::MaxValue)]
+    [int]$CaptureTimeoutSec = 1,
     [Parameter(Mandatory = $false)]
     [string[]]$CustomCommandlines,
     [Parameter(Mandatory = $false)]
@@ -93,10 +94,7 @@ if ($PSBoundParameters.Count -ge 1 -or $Args.Count -ge 1) {
     }
     Write-Host "Install file $installfiles found, creating Json."
 
-    #$command = "$folder\scripts\CreateJson.ps1" $installfiles $Description $Name $Arguments $StudioCommandline $outputfolder
-
-    #Invoke-Expression $command
-    & "$folder\scripts\CreateJson.ps1" -FilePath $installfiles -Description $Description -Name $Name -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition
+    & "$folder\scripts\CreateJson.ps1" -FilePath $installfiles -Description $Description -Name $Name -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition -CaptureTimeoutSec $CaptureTimeoutSec
 }
 else {
     $message = @"
