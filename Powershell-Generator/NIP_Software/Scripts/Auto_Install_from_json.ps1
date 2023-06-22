@@ -56,11 +56,11 @@ $installjsonName = Get-ChildItem $folder\auto| Where-Object { $_.Name -Like '*.j
 if ($installjsonName -notlike "*sccmauto.json"){
 
 do {
-    $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe'
+    $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe', '*.ps1', '*.bat'
 
  }until ($filecheck -eq $True)
 
-$installfiles = Get-ChildItem $folder\auto | Where-Object { $_.Name -Like ($installjson.basename + "*.msi") -or $_.Name -Like ($installjson.basename + "*.exe") } | Select-Object -ExpandProperty Name
+$installfiles = Get-ChildItem $folder\auto | Where-Object { $_.Name -Like ($installjson.basename + "*.msi") -or $_.Name -Like ($installjson.basename + "*.exe") -or $_.Name -Like ($installjson.basename + "*.ps1") -or $_.Name -Like ($installjson.basename + "*.bat") } | Select-Object -ExpandProperty Name
 
 do {
     $filecheck = Test-FileLock $installfiles
@@ -74,4 +74,3 @@ powershell.exe -ep bypass -file $folder\scripts\CloudpagingStudio-prep.ps1 $true
 
 #Run studio nip
 powershell.exe -ep bypass "& `"$folder\scripts\studio-nip.ps1`" -config_file_path `'$folder\auto\$installjsonName`'"
-
