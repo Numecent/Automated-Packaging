@@ -14,7 +14,7 @@
 ########################################################################
 
 Param(
-    [Parameter(Mandatory = $true)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
+    [Parameter(Mandatory = $true)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
     [string]$Filepath,
     [Parameter(Mandatory = $false)]
     [string]$Description,
@@ -32,6 +32,8 @@ Param(
     [string]$Encryption = 'AES-256-Enhanced',
     [Parameter(Mandatory = $false)][ValidateSet('3', '4')]
     [string]$DefaultDispositionLayer = 3,
+    [Parameter(Mandatory = $false)][ValidateRange(1, [int]::MaxValue)]
+    [int]$CaptureTimeoutSec = 1,
     [Parameter(Mandatory = $false)]
     [string[]]$CustomCommandlines,
     [Parameter(Mandatory = $false)]
@@ -93,7 +95,14 @@ Param(
         if (!$Arguments) {
             $Arguments = '/qn /norestart'
         }
-    }else
+    }
+    elseif ($Projinstaller_variable -like '*.ps1') {
+        $Projinstaller_variable = "powershell.exe -executionpolicy bypass -file `\`"" + ("$Projworkingfolder_variable\$Projinstaller_variable").replace('\', '\\' ) + "`\`""
+    }
+    elseif ($Projinstaller_variable -like '*.bat') {
+        $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_variable").replace('\', '\\' ) + "`\`""
+    }
+    else
 {
 $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_variable").replace('\', '\\' ) + "`\`""
 }
@@ -289,9 +298,10 @@ if ($CustomRegistryDisposition){
 
     #workout run time
     $filesize = (Get-ChildItem $filepath).Length / 1KB
-    $ProjTimeout_variable = [math]::Round(60 + $filesize / 1000)
 
-
+if ($CaptureTimeoutSec -eq 1){
+    $CaptureTimeoutSec = [math]::Round(60 + $filesize / 1000)
+}
 
     #Update Json with variables
 
@@ -311,7 +321,7 @@ if ($CustomRegistryDisposition){
         "PreCaptureCommands": [
         ],
         "CaptureSettings": {
-            "CaptureTimeoutSec": "$ProjTimeout_variable",
+            "CaptureTimeoutSec": "$CaptureTimeoutSec",
             "CaptureAllProcesses": $CaptureAllProcesses,
             "IncludeSystemInstallationProcesses": $IncludeSystemInstallationProcesses,
             "IgnoreChangesUnderInstallerPath": $IgnoreChangesUnderInstallerPath,
@@ -403,4 +413,3 @@ if ($CustomRegistryDisposition){
     $jsonoutputlocation = (Get-ChildItem $filepath).DirectoryName + '\' + (Get-ChildItem $filepath).BaseName + '.json'
 
     $jsonfilebody.Replace("False","false").Replace("True","true") | Set-Content $jsonoutputlocation
-
