@@ -14,18 +14,24 @@
 ########################################################################
 
 Param(
-    [Parameter(Mandatory = $true)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
+    [Parameter(Mandatory = $true)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.cmd' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
     [string]$Filepath,
     [Parameter(Mandatory = $false)]
     [string]$Description,
     [Parameter(Mandatory = $false)]
     [string]$Name,
     [Parameter(Mandatory = $false)]
+    [string]$IconFile,    
+    [Parameter(Mandatory = $false)]
+    [string]$WorkingFolder,
+    [Parameter(Mandatory = $false)]
     [string]$Arguments,
     [Parameter(Mandatory = $false)]
     [string]$StudioCommandline,
     [Parameter(Mandatory = $false)]
     [string]$outputfolder,
+    [Parameter(Mandatory = $false)]
+    [string]$OutputFileNameNoExt,
     [Parameter(Mandatory = $false)][ValidateSet('LZMA', 'NONE')]
     [string]$Compression = 'LZMA',
     [Parameter(Mandatory = $false)][ValidateSet('AES-256-Enhanced', 'AES-256', 'None')]
@@ -77,12 +83,7 @@ Param(
 )
 
     #Set unparamterised variables
-
-    $Projdefaultencryption_variable = $Encryption
-    $Projdefaultcompression_variable = $Compression
     $Projworkingfolder_variable = 'C:\NIP_software\auto'
-    $Projdefaultdisposition_variable = $DefaultDispositionLayer
-
 
     $date = Get-Date
 
@@ -99,7 +100,7 @@ Param(
     elseif ($Projinstaller_variable -like '*.ps1') {
         $Projinstaller_variable = "powershell.exe -executionpolicy bypass -file `\`"" + ("$Projworkingfolder_variable\$Projinstaller_variable").replace('\', '\\' ) + "`\`""
     }
-    elseif ($Projinstaller_variable -like '*.bat') {
+    elseif ($Projinstaller_variable -like '*.bat' -or $Projinstaller_variable -like '*.cmd') {
         $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_variable").replace('\', '\\' ) + "`\`""
     }
     else
@@ -117,21 +118,22 @@ $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_
     if (!$name) {
         $Name = (Get-ChildItem "$filepath").BaseName + ' cloudpaged'
     }
-    $Projname_variable = $Name.Replace('.', '-')
+    $Name = $Name.Replace('.', '-')
 
     #set description
     if (!$Description) {
-        $Description = "Automated conversion of $Projname_variable Created at $date"
+        $Description = "Automated conversion of $Name Created at $date"
     }
 
-    $ProjDesc_variable = $Description
+    $Workingfolder = $Workingfolder.replace('\', '\\' )
+    $IconFile = $IconFile.replace('\', '\\' )
 
-    #set description
+    #set commandline
     if (!$StudioCommandline) {
         $StudioCommandline = "$env:windir\System32\cmd.exe /c"
     }
 
-    $ProjCommandline_variable = $StudioCommandline.replace('\', '\\' )
+    $StudioCommandline = $StudioCommandline.replace('\', '\\' )
 
     if (!$outputfolder) {
         $outputfolder = 'C:\NIP_software\output'
@@ -139,11 +141,11 @@ $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_
     $outputfolder = $outputfolder.replace('\', '\\' )
 
     if (!$Encryption) {
-        $Projdefaultencryption_variable = 'AES-256-Enhanced'
+        $Encryption = 'AES-256-Enhanced'
     }
 
     if (!$Compression) {
-        $Projdefaultcompression_variable = 'LZMA'
+        $Compression = 'LZMA'
     }
 
     #Format commandlines for Json
@@ -168,9 +170,6 @@ $Projinstaller_variable = "`\`"" + ("$Projworkingfolder_variable\$Projinstaller_
 '@
        foreach ($ExcludedFile in $FileExclusions){
            $ExcludedFile = '"' + $ExcludedFile.replace('\', '\\' ).replace('"','\"') + '",' + "`n"
-           if ($ExcludedFile -like "* *"){
-            $ExcludedFile = $ExcludedFile.replace('\\', '\\\\' )
-           }
            $FileExclusionsjson += $ExcludedFile
        }
        $FileExclusionsjson = $FileExclusionsjson.Substring(0,$FileExclusionsjson.Length-2)
@@ -235,7 +234,7 @@ if ($Fileaddition){
                 $contentescaped += "`"" +  $_.replace('\', '\\' ).replace('"','\"') + "`",`n"
                 }
             $contentescaped = $contentescaped.Substring(0,$contentescaped.Length-2)
-            $Fileadditionjson += "`"Content`": [`n" + $contentescaped  + "`n]`n},"
+            $Fileadditionjson += "`"Content`": [`n + $contentescaped  + `n]`n},"
 
             $FileAdditionNumber ++
         }
@@ -286,7 +285,7 @@ if ($CustomRegistryDisposition){
 
    foreach ($CustomRegistry in $CustomRegistryDisposition){
      $CustomRegistryDispositionjson += "`"Registry$RegistryAdditionNumber`": {`n"
-     $CustomRegistryDispositionjson +=  if($CustomRegistry.Location -like "* *"){"`"Location`": `"" + $CustomRegistry.Location.replace('\', '\\' ).replace('"','\"') + "`",`n" }else{"`"Location`": `"" + $CustomRegistry.Location.replace('"','\"') + "`",`n"}
+     $CustomRegistryDispositionjson += "`"Location`": `"" + $CustomRegistry.Location.replace('\', '\\' ).replace('"','\"') + "`",`n"
      $CustomRegistryDispositionjson += "`"Layer`": `"" + $CustomRegistry.Layer + "`",`n"
      $CustomRegistryDispositionjson += "`"Recurse`": `"" + $CustomRegistry.Recurse + "`"`n},`n"
      $RegistryAdditionNumber ++
@@ -310,11 +309,11 @@ if ($CaptureTimeoutSec -eq 1){
     {
         "JsonConfigVersion": 1.2,
         "ProjectSettings": {
-            "ProjectName": "$Projname_variable",
-            "ProjectDescription": "$ProjDesc_variable",
-            "IconFile": "",
-            "WorkingFolder": "",
-            "CommandLine": "$ProjCommandline_variable",
+            "ProjectName": "$Name",
+            "ProjectDescription": "$Description",
+            "IconFile": "$IconFile",
+            "WorkingFolder": "$WorkingFolder",
+            "CommandLine": "$StudioCommandline",
             "TargetOS": [
             ]
         },
@@ -376,7 +375,7 @@ if ($CaptureTimeoutSec -eq 1){
             "ModifyKeys": {$Registrymodifyjson}
         },
         "VirtualizationSettings": {
-            "DefaultDispositionLayer": $Projdefaultdisposition_variable,
+            "DefaultDispositionLayer": $DefaultDispositionLayer,
             "DefaultServiceVirtualizationAction": "$DefaultServiceVirtualizationAction",
             "FileDispositionLayers": {
                 $CustomfileDispositionjson
@@ -400,9 +399,9 @@ if ($CaptureTimeoutSec -eq 1){
             "DenyAccessLayer3": [$ProcessesDeniedAccessToLayers3and4]
         },
         "OutputSettings": {
-            "EncryptionMethod": "$Projdefaultencryption_variable",
-            "CompressionMethod": "$Projdefaultcompression_variable",
-            "OutputFileNameNoExt": "",
+            "EncryptionMethod": "$Encryption",
+            "CompressionMethod": "$Compression",
+            "OutputFileNameNoExt": "$OutputFileNameNoExt",
             "FinalizeIntoSTP": $FinalizeIntoSTP,
             "OutputFolder": "$outputfolder"
         }
