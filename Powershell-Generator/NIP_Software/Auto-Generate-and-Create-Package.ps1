@@ -15,12 +15,16 @@
 
 
 Param(
-    [Parameter(Mandatory = $false)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
+    [Parameter(Mandatory = $false)][ValidateScript({ $_.Replace("`"", '') -like '*.msi' -or $_.Replace("`"", '') -like '*.exe' -or $_.Replace("`"", '') -like '*.bat' -or $_.Replace("`"", '') -like '*.cmd' -or $_.Replace("`"", '') -like '*.ps1' -and (Test-Path -Path $_.Replace("`"", '') -PathType Leaf) -eq $true })]
     [string]$FilePath,
     [Parameter(Mandatory = $false)]
     [string]$Description,
     [Parameter(Mandatory = $false)]
     [string]$Name,
+    [Parameter(Mandatory = $false)]
+    [string]$IconFile,    
+    [Parameter(Mandatory = $false)]
+    [string]$WorkingFolder,
     [Parameter(Mandatory = $false)]
     [string]$Arguments,
     [Parameter(Mandatory = $false)]
@@ -94,7 +98,7 @@ if ($PSBoundParameters.Count -ge 1 -or $Args.Count -ge 1) {
     }
     Write-Host "Install file $installfiles found, creating Json."
 
-    & "$folder\scripts\CreateJson.ps1" -FilePath $installfiles -Description $Description -Name $Name -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition -CaptureTimeoutSec $CaptureTimeoutSec
+    & "$folder\scripts\CreateJson.ps1" -FilePath $installfiles -Description $Description -Name $Name -IconFile $IconFile -WorkingFolder $WorkingFolder -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition -CaptureTimeoutSec $CaptureTimeoutSec
 }
 else {
     $message = @"
@@ -106,14 +110,14 @@ C:\NIP_software\Auto-Generate-and-Create-Package.ps1 -FilePath `"\\myshare\mymsi
     Write-Host $message
 
     do {
-        $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe', '*sccmauto.ps1'
+        $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe', '*sccmauto.ps1', '*.cmd', '*.ps1', '*.bat'
         $runningPS = Get-WmiObject Win32_Process -Filter "Name='powershell.exe' AND CommandLine LIKE '%Auto-Generate-and-Create-Package.ps1%'"
 
         If ($runningps.Count -gt 1) { exit }
 
     }until ($filecheck -eq $True)
 
-    $installfiles = Get-ChildItem $folder\auto\ -Recurse -Include '*msi', '*.exe', '*sccmauto.ps1'
+    $installfiles = Get-ChildItem $folder\auto\ -Recurse -Include '*msi', '*.exe', '*sccmauto.ps1', '*.cmd', '*.ps1', '*.bat'
     if ($installfiles.Name -like '*sccmauto.ps1') {
         & $installfiles.FullName
     }
