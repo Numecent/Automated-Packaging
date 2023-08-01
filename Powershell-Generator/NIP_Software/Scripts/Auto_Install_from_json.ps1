@@ -56,11 +56,11 @@ $installjsonName = Get-ChildItem $folder\auto| Where-Object { $_.Name -Like '*.j
 if ($installjsonName -notlike "*sccmauto.json"){
 
 do {
-    $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe', '*.ps1', '*.bat'
+    $filecheck = Test-Path "$folder\auto\*" -Include '*msi', '*.exe', '*.ps1', '*.bat', '*.cmd'
 
  }until ($filecheck -eq $True)
 
-$installfiles = Get-ChildItem $folder\auto | Where-Object { $_.Name -Like ($installjson.basename + "*.msi") -or $_.Name -Like ($installjson.basename + "*.exe") -or $_.Name -Like ($installjson.basename + "*.ps1") -or $_.Name -Like ($installjson.basename + "*.bat") } | Select-Object -ExpandProperty Name
+$installfiles = Get-ChildItem $folder\auto | Where-Object { $_.Name -Like ($installjson.basename + "*.msi") -or $_.Name -Like ($installjson.basename + "*.exe") -or $_.Name -Like ($installjson.basename + "*.ps1") -or $_.Name -Like ($installjson.basename + "*.bat") -or $_.Name -Like ($installjson.basename + "*.cmd") } | Select-Object -ExpandProperty Name
 
 do {
     $filecheck = Test-FileLock $installfiles
