@@ -10,6 +10,8 @@
 #  Updated: 2023-02-07
 #	Added custom file & Reg dispositions.
 #	Added Reg modify and File Add params.
+#  Updated: 2023-08-03
+#	Added support for .cmd,.bat,.ps1
 #
 ########################################################################
 
