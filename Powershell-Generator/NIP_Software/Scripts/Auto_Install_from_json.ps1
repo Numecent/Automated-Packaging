@@ -5,6 +5,8 @@
 #
 #  Description:
 #  This script will auto run a json in NIP_software\auto
+# Date: 2023/08/09 
+#    Update: Added file checks for if multiple files match json name
 #
 ########################################################################
 
@@ -62,11 +64,12 @@ do {
 
 $installfiles = Get-ChildItem $folder\auto | Where-Object { $_.Name -Like ($installjson.basename + "*.msi") -or $_.Name -Like ($installjson.basename + "*.exe") -or $_.Name -Like ($installjson.basename + "*.ps1") -or $_.Name -Like ($installjson.basename + "*.bat") -or $_.Name -Like ($installjson.basename + "*.cmd") } | Select-Object -ExpandProperty Name
 
+foreach ($Installfile in $Installfiles){
 do {
-    $filecheck = Test-FileLock $installfiles
-    if ($filechecksleep -eq $True){sleep 5}
+    $filecheck = Test-FileLock $installfile
+    if ($filecheck -eq $True){sleep 5}
  }until ($filecheck -eq $False)
-
+ }
  }
 
 #Run studio prep
