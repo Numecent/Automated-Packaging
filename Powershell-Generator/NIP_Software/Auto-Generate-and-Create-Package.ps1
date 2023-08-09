@@ -12,6 +12,8 @@
 #	Added Reg modify and File Add params.
 #  Updated: 2023-08-03
 #	Added support for .cmd,.bat,.ps1
+#  Updated: 2023-08-09
+#	Added back missing check to handle multiple valid install files in Auto folder
 #
 ########################################################################
 
@@ -91,8 +93,9 @@ if ($PSBoundParameters.Count -ge 1 -or $Args.Count -ge 1) {
 
     Write-Host "Copying install file $FilePath to $folder\auto\"
     Copy-Item -recurse "$FilePath" "$folder\auto" -force
-
-    $installfiles = Get-ChildItem $folder\auto\ -Include $InstallFilename | Select-Object -ExpandProperty FullName
+    
+    $InstallFilename = (Get-ChildItem $Filepath).name
+    $Installfiles = Get-ChildItem $folder\auto -Filter $InstallFilename | Select-Object -ExpandProperty FullName
 
     if ($IncludeSourceDirectory -eq $true) {
         $SourceDirectory = Get-ChildItem $FilePath | Select-Object -ExpandProperty Directory
@@ -100,7 +103,7 @@ if ($PSBoundParameters.Count -ge 1 -or $Args.Count -ge 1) {
     }
     Write-Host "Install file $installfiles found, creating Json."
 
-    & "$folder\scripts\CreateJson.ps1" -FilePath $installfiles -Description $Description -Name $Name -IconFile $IconFile -WorkingFolder $WorkingFolder -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition -CaptureTimeoutSec $CaptureTimeoutSec
+    & "$folder\scripts\CreateJson.ps1" -FilePath $Installfiles -Description $Description -Name $Name -IconFile $IconFile -WorkingFolder $WorkingFolder -Arguments $Arguments -StudioCommandline $StudioCommandline -outputfolder $outputfolder -Compression $Compression -Encryption $Encryption -CustomCommandlines $CustomCommandlines -RegistryExclusions $RegistryExclusions -FileExclusions $FileExclusions -ProcessesAllowedAccessToLayer4 $ProcessesAllowedAccessToLayer4 -ProcessesDeniedAccessToLayers3and4 $ProcessesDeniedAccessToLayers3and4 -CaptureAllProcesses $CaptureAllProcesses -IncludeSystemInstallationProcesses $IncludeSystemInstallationProcesses -IgnoreChangesUnderInstallerPath $IgnoreChangesUnderInstallerPath -ReplaceRegistryShortPaths $ReplaceRegistryShortPaths -IncludeChildProccesses $IncludeChildProccesses -Prerequisites $Prerequisites -PrerequisiteCommands $PrerequisiteCommands -DefaultServiceVirtualizationAction $DefaultServiceVirtualizationAction -FinalizeIntoSTP $FinalizeIntoSTP -Fileaddition $Fileaddition -Registrymodify $Registrymodify -CustomFileDisposition $CustomFileDisposition -CustomRegistryDisposition $CustomRegistryDisposition -CaptureTimeoutSec $CaptureTimeoutSec
 }
 else {
     $message = @"
