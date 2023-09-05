@@ -10,7 +10,7 @@
 #   prohibited except as permitted by express written license agreement
 #   with Numecent Inc.
 #
-# Revision January 26, 2023
+# Revision August 9th, 2023
 
 <#
 .SYNOPSIS
@@ -351,7 +351,7 @@ if(-NOT (Test-Path -Path $studioCmd))
 {
     Throw "Cloudpaging Studio was not found to be installed at location: $studioPath"
 }
-if((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA) {
+if((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA -and (Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).ConsentPromptBehaviorAdmin) {
     Throw "Windows user access control (UAC) is enabled on this machine and can interfere with automated packaging."
 }
 
@@ -458,6 +458,7 @@ switch ($PsCmdlet.ParameterSetName)
                     }
                     $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
                     $DefaultDispositionLayer = $json.VirtualizationSettings.DefaultDispositionLayer
+                    $DefaultServiceVirtualizationAction = $json.VirtualizationSettings.DefaultServiceVirtualizationAction
                     $OutputFileNameNoExt = $json.OutputSettings.OutputFileNameNoExt
                     if($appset_name){
                         $OutputFileNameNoExt = $appset_name
