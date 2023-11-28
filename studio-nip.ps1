@@ -200,6 +200,7 @@ Encryption = $($json.OutputSettings.EncryptionMethod)
 $services
 "@
 
+If((Get-ChildItem $stpFile).length -lt 2000000000){
     $zipName = Split-Path $stpFile -Leaf
     $zipName = $zipName.Replace(".stp",".zip")
 
@@ -218,6 +219,13 @@ $services
 
     Rename-Item -Path $zipFile -NewName $stpName
     Remove-Item -Path $NotePath
+    }
+    else
+    {
+    $notePath = $output_folder + "\RevNotes.txt"
+    $noteString = $revNotesText
+    $noteString |Out-String | Out-File -FilePath $notePath
+    }
 }
 function Backup-Dat {
     #Create a .bak backup file of the dat
