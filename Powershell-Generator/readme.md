@@ -122,6 +122,8 @@ The second example is capturing Acrobat with an MST (using Arguments).
 
 -**Compression** – Set compression type to use ('**LZMA**', 'NONE') 
 
+-**CaptureTimeoutSec** – Set capture timeout as an int value. (Default is 60 + target filesize / 1000)
+
 -**Encryption** – Set encryption type to use ('**AES-256-Enhanced**', 'AES-256', 'None') 
 
 -**DefaultDispositionLayer** – Set default disposition layer for package to use (‘**3**’, '4 ') 
