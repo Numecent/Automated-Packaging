@@ -1,0 +1,158 @@
+{
+  "JsonConfigVersion": 1.3,
+  "ProjectSettings": {
+    "ProjectName": "Typically the file name without an extension of the installer. DEFAULT: File name (without extension) of installer specified in InstallerPath",
+    "ProjectDescription": "A brief one line description. DEFAULT: <ProjectName>",
+    "IconFile": "Path to the icon file. DEFAULT: Source file of the command line executable",
+    "WorkingFolder": "Path to the folder to use when the packaged application is launched. DEFAULT: Folder of the command line executable, if any",
+    "CommandLine": "REQUIRED: Command line to use when the packaged application is launched, including parameters",
+    "TargetOS": [
+      // A list of operating systems allowed for the application.
+      // DEFAULT: Current OS.
+      // Possible values: 
+      //   'Win8' means: Windows 10 (32-bit)
+      //   'Win7-x64' or 'Win8-x64' means: Windows 10 to 11 and 2012 R2 to 2022 (64-bit)
+      // For example:
+      "Win8",
+      "Win7-x64",
+      "Win8-x64"
+    ]
+  },
+  "PreCaptureCommands": [
+    "Commands placed here will execute before capture process begins",
+    "Each array entry is a new line in a BAT file"
+  ],
+  "CaptureSettings": {
+    "CaptureTimeoutSec": "INTEGER: Time in seconds before quitting the capture process. DEFAULT: 0",
+    "CaptureAllProcesses": "BOOLEAN: if false, Studio will only capture installer and child processes. DEFAULT: false",
+    "IncludeSystemInstallationProcesses": "BOOLEAN: if false, Studio will not capture system installation processes. DEFAULT: true",
+    "IgnoreChangesUnderInstallerPath": "BOOLEAN: if false, file changes that occur in the same path as the installer will be ignored. DEFAULT: true",
+    "ReplaceRegistryShortPaths": "BOOLEAN: if true, shortcut paths in registry are replaced with full path names. DEFAULT: true",
+    "RegistryExclusions": [
+      "A list of registry paths to exclude from capture",
+      "For example:",
+      "HKEY_CURRENT_USER\\\\SOFTWARE\\\\Local Settings"
+    ],
+    "FileExclusions": [
+      "A list of file paths to exclude from capture",
+      "For example:",
+      "%winDir%\\Installer\\*.msp"
+    ],
+    "ProcessExclusions": [
+      "A list of process paths to exclude from capture",
+      "For example:",
+      "C:\\WINDOWS\\SYSTEM32\\SEARCHINDEXER.EXE"
+    ],
+    "ProcessInclusions": {
+      "IncludeChildProcesses": "BOOLEAN: If true, processes included in capture will also have their child processes captured",
+      "Include": [
+        "An array of process names to include in capture",
+        "For example:",
+        "MSIEXEC.EXE"
+      ]
+    }
+  },
+  "CaptureCommands": {
+    "Enabled": "BOOLEAN: If true, a BAT file will be produced with installation commands",
+    "Prerequisites": {
+      "Enabled": "BOOLEAN: If true, commands here will be executed before program is installed",
+      "Commands": [
+        "An array of commands to execute before program installation but are still included in capture"
+      ]
+    },
+    "InstallerPrefix": "A: Occurs before installer path in execution command (A + B + C) EX: msiexec /i",
+    "InstallerPath": "REQUIRED: B: Path to the installer, second in execution command (A + B + C) EX: path\\to\\msi",
+    "InstallerCommands": "C: Occurs after installer in execution command (A + B + C) EX: AllUsers=1 TARGETDIR=\"%programfiles%\\Python2\" /qn /norestart",
+    "PostInstallActions": {
+      "Enabled": "BOOLEAN: If true, commands placed here will be executed after installer commands",
+      "Commands": [
+        "An array of commands to be placed in a BAT file, will be included in capture",
+        "For example:",
+        "dir \"%programfiles%\\python*\" /b /A:D>SlV.txt"
+      ]
+    },
+    "DebugMode": "BOOLEAN: If false, BAT files will have the first 3 lines by default: @ECHO OFF, SET SOURCE=%~dp0, SET SOURCE=%SOURCE:~0,-1%"
+  },
+  "PostCaptureCommands": {
+    "AddFolders": {
+      "ExampleName": {
+        "SourcePath": "REQUIRED: Path to the source folder",
+        "DestinationPath": "Path to the destination folder. When it is empty, it is assumed to be the same as the SourcePath",
+        "IncludeSubfolders": "BOOLEAN: Recursively include subfolders. DEFAULT: false",
+        "IncludeFilesInFolders": "BOOLEAN: Include files within the folder(s). DEFAULT: false"
+      }
+    },
+    "AddKeys": {
+      "ExampleName": {
+        "SourceKey": "REQUIRED: Path to source registry location",
+        "DestinationKey": "Path to destination registry location. When it is empty, it is assumed to be the same as the SourceKey",
+        "IncludeSubkeys": "BOOLEAN: Recursively include subkeys. DEFAULT: false",
+        "IncludeValuesInKeys": "BOOLEAN: Include values within the key(s). DEFAULT: false"
+      }
+    }
+  },
+  "ModifyAssets": {
+    "AddFiles": {
+      "ExampleName": {
+        "Name": "Name of file including extension",
+        "Destination": "Location of where file will be placed, placing the file is included in capture",
+        "Content": [
+          "An array of content to place in the file",
+          "Each entry is a new line"
+        ]
+      }
+    },
+    "ModifyKeys": {
+      "ExampleRegistryChange": {
+        "Location": "Path to registry location",
+        "Keys": [
+          "An array of updates to given registry locations",
+          "For example:",
+          "UpdateDefault=dword:00000000"
+        ]
+      }
+    }
+  },
+  "VirtualizationSettings": {
+    "DefaultDispositionLayer": "INTEGER: Default disposition layer (3 or 4) for newly captured assets. DEFAULT: 3",
+    "DefaultServiceVirtualizationAction": "Action to take for newly captured services and drivers. Possible values: None, Register, Start. DEFAULT: Register",
+    "FileDispositionLayers": {
+      "ExampleName": {
+        "Path": "Path to files/folder which will have its disposition layer modified",
+        "Layer": "INTEGER: disposition layer for this path",
+        "Recurse": "BOOLEAN: Include subfolders/files starting from Path"
+      }
+    },
+    "RegistryDispositionLayers": {
+      "ExampleName": {
+        "Location": "Registry Key location",
+        "Layer": "INTEGER: disposition layer for registry location",
+        "Recurse": "BOOLEAN: Include nested registry locations beyond this Location"
+      }
+    },
+    "SandboxFileExclusions": [
+      "Array of file paths to excluded from sandbox"
+    ],
+    "SandboxRegistryExclusions": [
+      "Array of registry paths to be excluded from sandbox"
+    ]
+  },
+  "SecurityOverrideSettings": {
+    "AllowAccessLayer4": {
+      "AllowReadAndCopy": "BOOLEAN: If this is true, processes in array will be able to read and copy layer 4 assets",
+      "Processes": [
+        "Array of process names that are allowed to detect files in the virtualized appset at layer 4"
+      ]
+    },
+    "DenyAccessLayer3": [
+      "Array of processes that will be prevented from detecting layer 3 and 4 assets"
+    ]
+  },
+  "OutputSettings": {
+    "EncryptionMethod": "Type of encryption method to use. Possible Values: None, AES-256-Enhanced. DEFAULT: AES-256-Enhanced",
+    "CompressionMethod": "Type of compression method to use. Possible Values: None, LZMA, LZ4. DEFAULT: LZMA",
+    "OutputFileNameNoExt": "Optional custom name of output file not including extensions",
+    "FinalizeIntoSTP": "BOOLEAN: If true, files are condensed into an stp file, else they are left as standalone files. DEFAULT: true",
+    "OutputFolder": "Path to the folder where Studio output will be placed. DEFAULT: Current folder"
+  }
+}
