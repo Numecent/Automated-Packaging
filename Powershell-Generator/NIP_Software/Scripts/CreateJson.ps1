@@ -239,8 +239,7 @@ if ($Fileaddition){
                 $contentescaped += "`"" +  $_.replace('\', '\\' ).replace('"','\"') + "`",`n"
                 }
             $contentescaped = $contentescaped.Substring(0,$contentescaped.Length-2)
-            $Fileadditionjson += "`"Content`": [`n + $contentescaped  + `n]`n},"
-
+            $Fileadditionjson += "`"Content`": [" + "`n" + $contentescaped  + "`n" + "]`n},"
             $FileAdditionNumber ++
         }
         $Fileadditionjson = $Fileadditionjson.Substring(0,$Fileadditionjson.Length-1)
