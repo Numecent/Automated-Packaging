@@ -47,8 +47,8 @@ param (
     [Parameter(ParameterSetName="jsonFile", Position=5)][string]$debug_mode=$null
 )
 
-$NIPS_VERSION = 1.0              #Version number for nips, this will be stored in revnotes
-$SUPORTED_JSON = 1.0, 1.1, 1.2   #Add supported version in array
+$NIPS_VERSION = 1.0                   #Version number for nips, this will be stored in revnotes
+$SUPORTED_JSON = 1.0, 1.1, 1.2, 1.3   #Add supported version in array
 
 $studioIni = $null
 $script:createdFiles = @()          #List of files created in automated packaging
@@ -348,6 +348,78 @@ function Invoke-PreCaptureScript{
     }
 }
 
+function Add-Folders{
+    if($debug_mode){
+        Write-Output "Add folders..."
+    }
+
+    $addFolderCnt = 1
+    $folderSection = ""
+
+    foreach($entry in $json.PostCaptureCommands.AddFolders.PSObject.Properties.name){
+        $sourcePath = $json.PostCaptureCommands.AddFolders.PSObject.Properties[$entry].value.PSObject.Properties["SourcePath"].value
+        $destinationPath = $json.PostCaptureCommands.AddFolders.PSObject.Properties[$entry].value.PSObject.Properties["DestinationPath"].value
+        $includeSubfolders = "Yes"
+        if(!$json.PostCaptureCommands.AddFolders.PSObject.Properties[$entry].value.PSObject.Properties["IncludeSubfolders"].value){
+            $includeSubfolders = "No"
+        }
+        $includeFilesInFolders = "Yes"
+        if(!$json.PostCaptureCommands.AddFolders.PSObject.Properties[$entry].value.PSObject.Properties["IncludeFilesInFolders"].value){
+            $includeFilesInFolders = "No"
+        }
+
+        $sectionText = @"
+
+[AddFolder$addFolderCnt]
+SourcePath="$sourcePath"
+DestinationPath="$destinationPath"
+IncludeSubfolders=$includeSubfolders
+IncludeFilesInFolders=$includeFilesInFolders
+
+"@
+        $folderSection += $sectionText
+        $addFolderCnt++
+    }
+
+    return $folderSection
+}
+
+function Add-Keys{
+    if($debug_mode){
+        Write-Output "Add keys..."
+    }
+
+    $addKeysCnt = 1
+    $keysSection = ""
+
+    foreach($entry in $json.PostCaptureCommands.AddKeys.PSObject.Properties.name){
+        $sourceKey = $json.PostCaptureCommands.AddKeys.PSObject.Properties[$entry].value.PSObject.Properties["SourceKey"].value
+        $destinationKey = $json.PostCaptureCommands.AddKeys.PSObject.Properties[$entry].value.PSObject.Properties["DestinationKey"].value
+        $includeSubkeys = "Yes"
+        if(!$json.PostCaptureCommands.AddKeys.PSObject.Properties[$entry].value.PSObject.Properties["IncludeSubkeys"].value){
+            $includeSubkeys = "No"
+        }
+        $includeValuesInKeys = "Yes"
+        if(!$json.PostCaptureCommands.AddKeys.PSObject.Properties[$entry].value.PSObject.Properties["IncludeValuesInKeys"].value){
+            $includeValuesInKeys = "No"
+        }
+
+        $sectionText = @"
+
+[AddKey$addKeysCnt]
+SourceKey="$sourceKey"
+DestinationKey="$destinationKey"
+IncludeSubkeys=$includeSubkeys
+IncludeValuesInKeys=$includeValuesInKeys
+
+"@
+        $keysSection += $sectionText
+        $addKeysCnt++
+    }
+
+    return $keysSection
+}
+
 # Requires Administrator Rights
 if(-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
@@ -505,6 +577,18 @@ switch ($PsCmdlet.ParameterSetName)
 
                     $ProjectName = $json.ProjectSettings.ProjectName.Replace("`"","")
 
+                    # Add folder
+                    if($null -ne $json.PostCaptureCommands.AddFolders.PSObject.Properties.name)
+                    {
+                        $AddFolderSection = Add-Folders
+                    }
+
+                    # Add Keys
+                    if($null -ne $json.PostCaptureCommands.AddKeys.PSObject.Properties.name)
+                    {
+                        $AddKeysSection = Add-Keys
+                    }
+
                     # Find DAT file filter updates
                     if($json.CaptureSettings.FileExclusions)
                     {
@@ -634,7 +718,16 @@ switch ($PsCmdlet.ParameterSetName)
                         #Create Output String and format for writing to DAT file
                         $OutputString = ""
                         $bool = "TRUE"
-                        if(-NOT ($json.CaptureSettings.ProcessInclusions.IncludeChildProccesses))
+
+                        # field IncludeChildProccesses
+                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProccesses") -and 
+                           (-NOT ($json.CaptureSettings.ProcessInclusions.IncludeChildProccesses)))
+                        {
+                            $bool = "FALSE"
+                        }
+                        # field IncludeChildProcesses
+                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProcesses") -and 
+                           (-NOT ($json.CaptureSettings.ProcessInclusions.IncludeChildProcesses)))
                         {
                             $bool = "FALSE"
                         }
@@ -655,7 +748,9 @@ switch ($PsCmdlet.ParameterSetName)
                         $OutputString | Out-String | Add-Content $procfiltDAT
                     }
                     # Find DAT process filter updates
-                    if($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -Or $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
+                    if($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -or
+                       $json.SecurityOverrideSettings.AllowAccessLayer4.Processes -or 
+                       $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
                     {
                         # Back the DAT file
                         Backup-Dat $defprocsDAT
@@ -683,10 +778,19 @@ switch ($PsCmdlet.ParameterSetName)
                             $bool = "FALSE"
                         }
 
-                        foreach($proc in $json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses)
+                        if($json.SecurityOverrideSettings.AllowAccessLayer4.PSObject.Properties.name.Contains("Proccesses"))
+                        {
+                            $processes = $json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses
+                        }
+                        else 
+                        {
+                            $processes = $json.SecurityOverrideSettings.AllowAccessLayer4.Processes
+                        }
+                        foreach($proc in $processes)
                         {
                             $OutputString += "$proc`t`tTRUE`t$bool`n"
                         }
+
                         foreach($proc in $json.SecurityOverrideSettings.DenyAccessLayer3)
                         {
                             $OutputString += "$proc`t`tFALSE`n"
@@ -812,6 +916,8 @@ DefaultServiceVirtualizationAction=$DefaultServiceVirtualizationAction
 OutputFileNameNoExt=$OutputFileNameNoExt
 OutputFolder="$output_folder"
 FinalizeIntoSTP=$FinalizeIntoSTP
+$AddFolderSection
+$AddKeysSection
 "@
 
 # Execute the Cloudpaging-prep script, if present
