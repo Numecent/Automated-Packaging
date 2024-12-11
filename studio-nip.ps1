@@ -513,7 +513,7 @@ switch ($PsCmdlet.ParameterSetName)
                     $ProjectDescription = $json.ProjectSettings.ProjectDescription | Format-String
                     $CompressionMethod = $json.OutputSettings.CompressionMethod | Format-String
                     $EncryptionMethod = $json.OutputSettings.EncryptionMethod | Format-String
-                    $CommandLine = $json.ProjectSettings.CommandLine | Format-String
+                    $CommandLine = $json.ProjectSettings.CommandLine
                     $CommandLineParams = $json.ProjectSettings.CommandLineParams
                     $IconFile = $json.ProjectSettings.IconFile | Format-String
                     if(-NOT ([string]::IsNullOrEmpty($IconFile)))
