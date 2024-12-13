@@ -208,7 +208,7 @@ PostCaptureCommands section contains the folders, merged folders properties and 
 **AddKeys:** `SourceKey` and `DestinationKey` are the path to source and destination registry location respectively. When `DestinationKey` is empty, it is assumed to be the same as `SourceKey`.
 `IncludeSubkeys` and `IncludeValuesInKeys` allow to recursively include subkeys and values.
 
-**MergedFolders:** `Path` is the path to the root folder in the project. When `Merged` is empty, it is assumed it's **true**. **MergedFolders** feature required Studio 9.4.1 or greater.
+**MergedFolders:** `Path` is the path to the root folder in the project. When `Merged` is empty, it is assumed it's **true**. **MergedFolders** feature requires Studio 9.4.1 or greater.
 
 **Modify Assets**
 ```
