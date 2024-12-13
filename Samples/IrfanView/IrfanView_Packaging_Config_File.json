@@ -31,7 +31,7 @@
         "FileExclusions": [
             "%winDir%\\Installer\\*.msp",
             "%winDir%\\Installer\\*.msi",
-	    "%Programfiles%\\IrfanView\\iv_uninstall.exe"
+	        "%Programfiles%\\IrfanView\\iv_uninstall.exe"
         ],
         "ProcessExclusions": [],
         "ProcessInclusions": {
