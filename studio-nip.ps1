@@ -312,10 +312,10 @@ function Initialize-FileData{
 
         $content | Out-File -FilePath $tempDestination -Encoding ascii
         $script:createdFiles += $tempDestination
-	$filedataDestinationTest = Test-path $destination 
-	if ($filedataDestinationTest -eq $false){
-	New-item $destination -ItemType directory > $null -Force
-	}
+        $filedataDestinationTest = Test-path $destination
+        if ($filedataDestinationTest -eq $false){
+            New-item $destination -ItemType directory > $null -Force
+        }
         Add-Content $installer_path "COPY `"$tempDestination`" `"$destination`" `n"
     }
 
@@ -420,6 +420,35 @@ IncludeValuesInKeys=$includeValuesInKeys
     return $keysSection
 }
 
+function Merged-Folders{
+    if($debug_mode){
+        Write-Output "Merged folders..."
+    }
+
+    $mergedFolderCnt = 1
+    $mergedFolderSection = ""
+
+    foreach($entry in $json.PostCaptureCommands.MergedFolders.PSObject.Properties.name){
+        $path = $json.PostCaptureCommands.MergedFolders.PSObject.Properties[$entry].value.PSObject.Properties["Path"].value
+        $merged = "Yes"
+        if(!$json.PostCaptureCommands.MergedFolders.PSObject.Properties[$entry].value.PSObject.Properties["Merged"].value){
+            $merged = "No"
+        }
+
+        $sectionText = @"
+
+[MergedFolder$mergedFolderCnt]
+Path="$path"
+Merged=$merged
+
+"@
+        $mergedFolderSection += $sectionText
+        $mergedFolderCnt++
+    }
+
+    return $mergedFolderSection
+}
+
 # Requires Administrator Rights
 if(-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
@@ -519,7 +548,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if(-NOT ([string]::IsNullOrEmpty($IconFile)))
                     {
                         $IconFile = """$IconFile"""
-                    }					
+                    }
 
                     $CaptureAllProcesses = "Yes"
                     if(!$json.CaptureSettings.CaptureAllProcesses)
@@ -528,12 +557,12 @@ switch ($PsCmdlet.ParameterSetName)
                     }
                     $IgnoreChangesUnderInstallerPath = "Yes"
                     if(!$json.CaptureSettings.IgnoreChangesUnderInstallerPath)
-                    {       
+                    {
                         $IgnoreChangesUnderInstallerPath = "No"
                     }
                     $ReplaceRegistryShortPaths ="Yes"
                     if(!$json.CaptureSettings.ReplaceRegistryShortPaths)
-                    {       
+                    {
                         $ReplaceRegistryShortPaths = "No"
                     }
                     $CaptureTimeout = $json.CaptureSettings.CaptureTimeoutSec
@@ -589,12 +618,18 @@ switch ($PsCmdlet.ParameterSetName)
                         $AddKeysSection = Add-Keys
                     }
 
+                    # Merged Folders
+                    if($null -ne $json.PostCaptureCommands.MergedFolders.PSObject.Properties.name)
+                    {
+                        $MergedFoldersSection = Merged-Folders
+                    }
+
                     # Find DAT file filter updates
                     if($json.CaptureSettings.FileExclusions)
                     {
                         # Back the DAT file
                         Backup-Dat $fileDAT
-			
+
                         # Append DAT files
                         Add-Content $fileDAT "`r`n`n# -------------------------"
                         Add-Content $fileDAT "FILTER_ACTION EXCLUDE"
@@ -680,7 +715,7 @@ switch ($PsCmdlet.ParameterSetName)
 
                         $OutputString | Out-String | Add-Content $procexDAT
                     }
-                    
+
                     ## Format 1.1 feature backwards compatible
                     # Check if system installation processes should be captured (by default, will capture these processes)
                     if(-NOT ([string]::IsNullOrEmpty($json.CaptureSettings.IncludeSystemInstallationProcesses)) -AND -NOT ($json.CaptureSettings.IncludeSystemInstallationProcesses))
@@ -691,7 +726,7 @@ switch ($PsCmdlet.ParameterSetName)
                             Write-Output "Backing up $procfiltDAT"
                             Copy-Item -Path $procfiltDAT -Destination $procfiltDAT".bak"
                         }
-                        
+
                        # Captures all initial comments with #* in the process filter
                        # Will break on the first instance of anything that is not "#*"
                        Set-Content $procfiltDAT -Value $(
@@ -712,7 +747,7 @@ switch ($PsCmdlet.ParameterSetName)
 
                         # Back the DAT file
                         Backup-Dat $procfiltDAT
-			
+
                         # Append DAT files
                         Add-Content $procfiltDAT "`n# Filters for $ProjectName"
                         #Create Output String and format for writing to DAT file
@@ -720,13 +755,13 @@ switch ($PsCmdlet.ParameterSetName)
                         $bool = "TRUE"
 
                         # field IncludeChildProccesses
-                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProccesses") -and 
+                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProccesses") -and
                            (-NOT ($json.CaptureSettings.ProcessInclusions.IncludeChildProccesses)))
                         {
                             $bool = "FALSE"
                         }
                         # field IncludeChildProcesses
-                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProcesses") -and 
+                        if($json.CaptureSettings.ProcessInclusions.PSObject.Properties.name.Contains("IncludeChildProcesses") -and
                            (-NOT ($json.CaptureSettings.ProcessInclusions.IncludeChildProcesses)))
                         {
                             $bool = "FALSE"
@@ -749,7 +784,7 @@ switch ($PsCmdlet.ParameterSetName)
                     }
                     # Find DAT process filter updates
                     if($json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses -or
-                       $json.SecurityOverrideSettings.AllowAccessLayer4.Processes -or 
+                       $json.SecurityOverrideSettings.AllowAccessLayer4.Processes -or
                        $json.SecurityOverrideSettings.DenyAccessLayer3) ##!!
                     {
                         # Back the DAT file
@@ -782,7 +817,7 @@ switch ($PsCmdlet.ParameterSetName)
                         {
                             $processes = $json.SecurityOverrideSettings.AllowAccessLayer4.Proccesses
                         }
-                        else 
+                        else
                         {
                             $processes = $json.SecurityOverrideSettings.AllowAccessLayer4.Processes
                         }
@@ -825,7 +860,7 @@ switch ($PsCmdlet.ParameterSetName)
                     if ($json.VirtualizationSettings.FileDispositionLayers -AND ($script:versionNumber -ge 9.2)) {
                         # Back the DAT file
                         Backup-Dat $fileDispoDAT
-			
+
                         $OutputString = "`n"
                         $json.VirtualizationSettings.FileDispositionLayers.PSObject.Properties | ForEach-Object {
                             $path = $_.PSObject.Properties.Value.Path
@@ -918,6 +953,7 @@ OutputFolder="$output_folder"
 FinalizeIntoSTP=$FinalizeIntoSTP
 $AddFolderSection
 $AddKeysSection
+$MergedFoldersSection
 "@
 
 # Execute the Cloudpaging-prep script, if present
@@ -936,8 +972,8 @@ if($processIni)
     $script:createdFiles += $studioIni
     Write-Output "Creating non-interactive packaging INI as $studioIni"
     New-Item $studioIni -type file -force -value $functionText | Out-Null
-} 
-else 
+}
+else
 {
     Write-Output "Input file is $studioIni"
 }

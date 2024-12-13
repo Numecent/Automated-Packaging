@@ -89,6 +89,12 @@
         "IncludeSubkeys": "BOOLEAN: Recursively include subkeys. DEFAULT: false",
         "IncludeValuesInKeys": "BOOLEAN: Include values within the key(s). DEFAULT: false"
       }
+    },
+    "MergedFolders": {
+      "ExampleName": {
+        "Path": "REQUIRED: Path to the root folder",
+        "Merged": "BOOLEAN: Set root forder to merged state. DEFAULT: true"
+      }
     }
   },
   "ModifyAssets": {
