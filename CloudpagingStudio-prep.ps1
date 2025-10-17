@@ -40,7 +40,7 @@ function Disable-Service
     # service status
     $ServiceInfo = Get-Service -Name $ServiceName
 
-    If ($ServiceInfo.Status -eq ‘Running’) 
+    If ($ServiceInfo.Status -eq "Running") 
     {
         # set the service to "disabled"
         sc.exe config $ServiceName start=disabled | Out-Null

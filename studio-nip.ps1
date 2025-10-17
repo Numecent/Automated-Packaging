@@ -162,7 +162,7 @@ function Get-ServiceString {
     return $servicesString
 }
 
-function Get-RevNote{
+function Get-RevNote {
     Param(
         [Parameter(Mandatory=$true, Position=0)]
         [string] $stpFile
@@ -200,31 +200,30 @@ Encryption = $($json.OutputSettings.EncryptionMethod)
 $services
 "@
 
-If((Get-ChildItem $stpFile).length -lt 2000000000){
-    $zipName = Split-Path $stpFile -Leaf
-    $zipName = $zipName.Replace(".stp",".zip")
+    If((Get-ChildItem $stpFile).length -lt 2000000000){
+        $zipName = Split-Path $stpFile -Leaf
+        $zipName = $zipName.Replace(".stp",".zip")
 
-    Rename-Item -Path $StpFile -NewName $zipName
-    $zipFile = $stpFile.Replace(".stp",".zip")
+        Rename-Item -Path $StpFile -NewName $zipName
+        $zipFile = $stpFile.Replace(".stp",".zip")
 
-    $notePath = $output_folder + "\RevNotes.txt"
+        $notePath = $output_folder + "\RevNotes.txt"
 
-    $noteString = $revNotesText
-    $noteString |Out-String | Out-File -FilePath $notePath
+        $noteString = $revNotesText
+        $noteString |Out-String | Out-File -FilePath $notePath
 
-    $stpName = Split-Path $StpFile -Leaf
+        $stpName = Split-Path $StpFile -Leaf
 
-    Compress-Archive -Path $notePath -Update -DestinationPath $zipFile
+        Compress-Archive -Path $notePath -Update -DestinationPath $zipFile
 
-
-    Rename-Item -Path $zipFile -NewName $stpName
-    Remove-Item -Path $NotePath
+        Rename-Item -Path $zipFile -NewName $stpName
+        Remove-Item -Path $NotePath
     }
     else
     {
-    $notePath = $output_folder + "\RevNotes.txt"
-    $noteString = $revNotesText
-    $noteString |Out-String | Out-File -FilePath $notePath
+        $notePath = $output_folder + "\RevNotes.txt"
+        $noteString = $revNotesText
+        $noteString |Out-String | Out-File -FilePath $notePath
     }
 }
 function Backup-Dat {
@@ -458,7 +457,12 @@ if(-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Verify Studio is installed and UAC is disabled
 if(-NOT (Test-Path -Path $studioCmd))
 {
-    Throw "Cloudpaging Studio was not found to be installed at location: $studioPath"
+    # If old jukeboxstudio.exe not found, then serach for the new one.
+    $studioCmd = $studioPath + "CloudpagingStudio.exe"
+    if(-NOT (Test-Path -Path $studioCmd))
+    {
+        Throw "Cloudpaging Studio was not found to be installed at location: $studioPath"
+    }
 }
 if((Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System).EnableLUA) {
     Throw "Windows user access control (UAC) is enabled on this machine and can interfere with automated packaging."
@@ -706,6 +710,7 @@ switch ($PsCmdlet.ParameterSetName)
                             if($entry -match " ")
                             {
                                 $OutputString += "`"$($entry)`"`n"
+                                $OutputString = $OutputString.Replace("\", "\\")
                             }
                             else
                             {
