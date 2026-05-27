@@ -49,12 +49,6 @@
     },
     "CaptureCommands": {
         "Enabled": "BOOLEAN: If true, a bat file will be produced with installation commands",
-        "Prerequisites": {
-            "Enabled": "BOOLEAN: If true, commands here will be executed before program is installed",
-            "Commands": [
-                "An array of commands to execute before program installation but are still included in capture"
-            ]
-        },
         "InstallerPrefix": "A: Occurs before installer path in execcution command (A + B + C) EX: msiexec /i",
         "InstallerPath": "B: Path to the installer, second in execution command (A + B + C) EX: path\\to\\msi",
         "InstallerCommands": "C: Occurs after installer in execution command (A + B + C) EX: AllUsers=1 TARGETDIR=\"%programfiles%\\Python2\" /qn /norestart",
@@ -66,7 +60,6 @@
                 "dir \"%programfiles%\\python*\" /b /A:D>SlV.txt"
             ]
         },
-        "DebugMode": "BOOLEAN: If false, bat files will be have the first 3 lines by default: @ECHO OFF, SET SOURCE=%~dp0, SET SOURCE=%SOURCE:~0,-1%"
     },
     "ModifyAssets": {
         "AddFiles": {

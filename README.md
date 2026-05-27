@@ -121,10 +121,6 @@ Keys, files, and processes placed in their respective exclusion arrays will be i
 ```
     "CaptureCommands": {
         "Enabled": true,
-        "Prerequisites": {
-            "Enabled": false,
-            "Commands": []
-        },
         "InstallerPrefix": "msiexec /i ",
         "InstallerPath": "c:\\NIP_software\\LibreOffice\\Installer_cfg\\LibreOffice_Win_x64.msi",
         "InstallerCommands": " /qn /norestart ",
@@ -132,7 +128,6 @@ Keys, files, and processes placed in their respective exclusion arrays will be i
             "Enabled": false,
             "Commands": []
         },
-        "DebugMode": false
     },
 ```
 In order to speed up installation and seamlessly package applications, bat files are generated to execute installers quietly. Additionally, any commands executed by these bat files will be included in the capture. If this feature is not desired it can be disabled by the `Enabled` field. In this case, the user would still need to click through the installer as a normal installation.
@@ -147,7 +142,7 @@ So in this example it would yield the command:
 
 `msiexec /I “c:\NIP_software\LibreOffice\Installer_cfg\LibreOffice_Win_x64.msi”/qn /norestart`
 
-Any commands placed in `PostInstallActions` would be executed after this command. Any Commands Placed in `Prerequisites` would be executed before this command.
+Any commands placed in `PostInstallActions` would be executed after this command.
 
 By default, the following lines are added to the beginning of the bat files:
 ```
@@ -155,8 +150,6 @@ By default, the following lines are added to the beginning of the bat files:
 SET SOURCE=%~dp0
 SET SOURCE=%SOURCE:~0,-1%
 ```
-Setting `DebugMode` to true will prevent this from happening.
-
 **PostCaptureCommands**
 ```
     "PostCaptureCommands": {
