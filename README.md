@@ -332,3 +332,15 @@ Please upload only the JSON configuration files to the appropriate application f
 JSON files should be uploaded in the form:
 
 `/Automated-Packaging/Samples/MyApplication/MyApplication_Packaging_Config_File.json`
+
+## License
+
+Copyright (c) 2026 Numecent, Inc.
+
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## Trademarks
+
+Numecent®, Cloudpaging®, Cloudpager®, Cloudpaging Player®, Cloudpaging Studio®,
+Cloudpaging Server®, and related names, logos, product names, and service names
+are trademarks or registered trademarks of Numecent, Inc.
