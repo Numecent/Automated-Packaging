@@ -1,14 +1,8 @@
-#   Cloudpaging Studio - System Prep
+# Cloudpaging Studio - System Prep
 #
-#   Copyright (c) 2019 Numecent, Inc.  All rights reserved.
+# Copyright (c) 2023-2026 Numecent, Inc.
 #
-#   This file is an unpublished work and the proprietary and confidential
-#   information of Numecent.  Should this source code become published,
-#   it is entitled to the fullest protection under the copyright laws,
-#   as it was created as early as 1996, and continues to be updated and
-#   owned by Numecent. Use, disclosure, reproduction, or distribution is
-#   prohibited except as permitted by express written license agreement
-#   with Numecent Inc.
+# See the LICENSE file in the repository root for license terms.
 #
 # Revision Mar 21, 2024
 
